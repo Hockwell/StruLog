@@ -2,6 +2,7 @@
 using StruLog.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -59,6 +60,7 @@ namespace StruLog.SM
 
         private static Func<LogData, string> CreateOutputActionBySelector(string selector)
         {
+            var loggerNameRegex = new Regex(@"loggerName-[1-9]{1}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             switch (selector)
             {
                 case "msg":
@@ -86,8 +88,12 @@ namespace StruLog.SM
                     return (logData) => logData.level.EnumToString();
                 case "loggerName":
                     return (logData) => logData.loggerName;
-                //case var s when Regex.IsMatch(s, @"loggerName-\d{1}", RegexOptions.None):
-                //    return logData.loggerName.Split('.')[i];
+                case var s when loggerNameRegex.IsMatch(s): //'loggerName-n'
+                    ushort n = ushort.Parse(s[s.Length - 1].ToString());
+                    return (logData) =>
+                    {
+                        return ExtractShortLoggerName(n, logData.loggerName);
+                    };
                 case "obj":
                     return (logData) =>
                     {

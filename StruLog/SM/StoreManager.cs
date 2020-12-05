@@ -19,23 +19,37 @@ namespace StruLog.SM
         {
             return MinLogLevel <= logEntryLevel;
         }
+        /// <summary>
+        /// Показывает класс и строку по 0 и 1 фреймам
+        /// </summary>
+        /// <param name="logData"></param>
+        /// <returns></returns>
         protected static string GetExcClassLine(LogData logData)
         {
+            string str = string.Empty;
             if (logData.exception is null)
                 return null;
+
             System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace(logData.exception, true);
-            var stackFrame0 = trace.GetFrame(0);
-            var @class = stackFrame0?.GetMethod().ReflectedType.FullName;
-            var @method = stackFrame0?.GetFileLineNumber();
-            if (string.IsNullOrEmpty(@class))
-                return null;
-            return $"({@class},{@method})";
+            str += ExtractClassLineFromFrame(0);
+            str += ExtractClassLineFromFrame(1);
+            return str;
+
+            string ExtractClassLineFromFrame(int frameNum)
+            {
+                var stackFrame = trace.GetFrame(frameNum);
+                var @class = stackFrame?.GetMethod().ReflectedType.Name;
+                var @method = stackFrame?.GetFileLineNumber();
+                if (!string.IsNullOrEmpty(@class))
+                    return $"/Frame{frameNum}: {@class},{@method} ";
+                return string.Empty;
+            }
         }
         protected static string GetExcMsg(LogData logData)
         {
             if (logData.exception is null)
                 return null;
-            return $"{ logData.exception.GetType()}:{ logData.exception.Message}";
+            return $"{ logData.exception.GetType()}:{ logData.exception.Message }";
         }
         internal static void RunProcessing()
         {
@@ -44,6 +58,29 @@ namespace StruLog.SM
                 if (store is IBatchProcessingCompatible bStore)
                     bStore.RunBatchProcessing();
             }
+        }
+
+        /// <summary>
+        /// Позволяет получить лишь часть Namespace-имени логгера, которое разделено точками зачастую
+        /// </summary>
+        /// <param name="loggerNameSegmentsNum"></param>
+        /// <param name="loggerName"></param>
+        /// <returns></returns>
+        internal static string ExtractShortLoggerName(ushort loggerNameSegmentsNum, string loggerName)
+        {
+            ushort nameSegmentsIndex = 0; //MainClass.LalkaClass.GalkaClass (3 parts); 1 - крайний правый сегмент (GalkaClass)
+            for (int i = loggerName.Length - 1; i >= 0; i--) //идём справа-налево
+            {
+                if (loggerName[i] == '.') //край сегмента достигнут
+                {
+                    nameSegmentsIndex++;
+                    if (nameSegmentsIndex == loggerNameSegmentsNum)
+                    {
+                        return loggerName.Substring(i + 1); //+1, чтобы точку слева миновать
+                    }
+                }
+            }
+            return loggerName; //в имени сегментов меньше или равно требуемого кол-ва
         }
     }
 }
