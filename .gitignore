@@ -5,3 +5,5 @@ StruLogDemo/bin
 StruLogDemo/obj
 StruLog/bin/
 StruLog/obj/
+StruLog/Properties/
+*.csproj.user
