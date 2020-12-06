@@ -1,7 +1,6 @@
 # StruLog
-
-Structural logging to console, file, db with multi-threading and output queues support. Это простой логгер с важными функциями.
-
+- Structural logging to console, file, db with multi-threading and output queues support. Это простой логгер с важными функциями.
+- Пишите, если найдёте баги и узкие места. 
 # Особенности
 
 - Алгоритмы быстрые
