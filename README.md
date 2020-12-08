@@ -5,10 +5,10 @@
 - Подробности реализации и пути модернизации описаны в документации.
 - Пишите, если найдёте баги, узкие места и др. проблемы.
 
-# Использование (use guide)
+# Использование (start guide)
 1. Edit config file (example in /docs).
-2. StruLog.StruLogProvider.Init(configPath)
-3. (static readonly field on each logged class) logger = LoggersFactory.GetLogger<MainClass>() or logger = LoggersFactory.GetLogger(typeof(MainClass))[for static MainClass] 
+2. `StruLog.StruLogProvider.Init(configPath)`
+3. (static readonly field on each logged class) `logger = LoggersFactory.GetLogger<MainClass>()` or `logger = LoggersFactory.GetLogger(typeof(MainClass))`[for static MainClass]
 
 Details in /docs
 # Особенности
