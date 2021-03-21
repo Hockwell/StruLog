@@ -17,6 +17,8 @@ namespace StruLog.SM
         internal override object CreateLogEntry(LogData logData, object outputPattern)
         {
             LogDataModel model = new LogDataModel();
+            if (logData.exception != null)
+                model.exception = new LogDataModel.ExceptionInfo();
             foreach (var action in outputPattern as List<Action<LogData, LogDataModel>>)
             {
                 action.Invoke(logData, model);

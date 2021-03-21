@@ -3,13 +3,16 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Hockwell</Authors>
-    <Version>1.3.0</Version>
+    <Version>1.3.1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/Hockwell/StruLog</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Hockwell/StruLog</PackageProjectUrl>
+    <PackageTags>logger</PackageTags>
+    <Description>Structural logging to console, file, db with multi-threading, output queues support and open source</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.10.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.12.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 

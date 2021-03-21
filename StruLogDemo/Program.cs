@@ -21,7 +21,7 @@ namespace StruLogDemo
                     }
                     catch(Exception e)
                     {
-                        logger.Debug("message from Thread A", new { el = 5, zel = 6 }, e);
+                        logger.Info("message from Thread A", new { el = 5, zel = 6 }, e);
                         await Task.Delay(500);
                     }
                     
@@ -38,7 +38,7 @@ namespace StruLogDemo
                     }
                     catch (Exception e)
                     {
-                        logger.Debug("dfsdf", e);
+                        logger.Info("dfsdf", e);
                     }
                 }
             });
