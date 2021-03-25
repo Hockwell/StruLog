@@ -4,6 +4,7 @@ using StruLog.Exceptions;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -132,7 +133,7 @@ namespace StruLog.SM
             if (String.IsNullOrEmpty(fileContent))
                 return default;
 
-            return Convert.ToDateTime(fileContent);
+            return Convert.ToDateTime(fileContent, CultureInfo.InvariantCulture);
         }
         private void CreateFileOnHot()
         {
@@ -157,7 +158,7 @@ namespace StruLog.SM
                 createdTimeOfLastFile = Logger.GetCurrentTime(); //время запрошено из класса логгера, ибо нужен конфиг с поясом
                 try
                 {
-                    File.WriteAllText(CreatedTimeOfLastLogFile_InfoFilePath, createdTimeOfLastFile.ToString("d"));
+                    File.WriteAllText(CreatedTimeOfLastLogFile_InfoFilePath, createdTimeOfLastFile.ToString("d",CultureInfo.InvariantCulture));
                 }
                 catch
                 {
