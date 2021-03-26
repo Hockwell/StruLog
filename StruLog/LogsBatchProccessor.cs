@@ -48,7 +48,7 @@ namespace StruLog
                         }
                         logEntriesIgrnoring_endTime = Logger.GetCurrentTime();
                         TimeSpan ignoreTime = logEntriesIgrnoring_endTime - logEntriesIgrnoring_startTime;
-                        StoreLogger.Error($"New logEntries beginning with {ignoreTime:g} not exporting");
+                        StoreLogger.Error($"New logEntries not exporting during the {ignoreTime:g}");
                     }
                     else if (entriesIgrnoring_startTime_Saved)
                         entriesIgrnoring_startTime_Saved = false; //теперь если в след. раз заполненность достигнет 100%, рассчитается новое стартовое время
