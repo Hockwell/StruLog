@@ -22,7 +22,7 @@ namespace StruLogDemo
                     catch(Exception e)
                     {
                         logger.Info("message from Thread A", new { el = 5, zel = 6 }, e);
-                        await Task.Delay(500);
+                        await Task.Delay(5);
                     }
                     
                 }
@@ -33,7 +33,7 @@ namespace StruLogDemo
                     try
                     {
                         logger.Info("message from Thread B", new { el = 67, zel = 434, lalalachka = "ki" });
-                        await Task.Delay(500);
+                        await Task.Delay(5);
                         throw new Exception("my custom exception message, frame0");
                     }
                     catch (Exception e)
@@ -42,8 +42,15 @@ namespace StruLogDemo
                     }
                 }
             });
+            var task3 = Task.Run(async () => {
+                for (int i = 0; i < 15000; i++)
+                {
+                    logger.Warn("message from Thread С");
+                    await Task.Delay(5);
+                }
+            });
 
-            await Task.WhenAll(new Task[] { task1, task2 });
+            await Task.WhenAll(new Task[] { task1, task2, task3 });
         }
         static void lalka()
         {

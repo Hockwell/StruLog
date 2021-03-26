@@ -5,6 +5,7 @@ using StruLog.Exceptions;
 using StruLog.SM;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using static StruLog.StringTools;
 
@@ -84,7 +85,7 @@ namespace StruLog
                 var val = (string)usingStores[i];
                 list.Add(InitStoreManager(val));
             }
-            Config.usingStores = list.ToArray();
+            Config.usingStores = list.ToImmutableList();
         }
         private static void ParseTime()
         {
