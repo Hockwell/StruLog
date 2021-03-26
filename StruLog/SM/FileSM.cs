@@ -20,6 +20,9 @@ namespace StruLog.SM
         public int[] AccessAttemptsDelays_mSeconds { get; }
         public int ProcessingQueueSize { get; }
         private static FileSM @this = null;
+        /// <summary>
+        /// default, if unknown
+        /// </summary>
         private DateTime createdTimeOfLastFile;
         private StreamWriter file = null; //дескриптор занимаем при работе ПО: 
         //меньше запросов к ОС за дескриптором и не позволяем др. ПО завладеть файлом
@@ -113,15 +116,26 @@ namespace StruLog.SM
                     return time.Month.ToString();
             }
         }
-        private bool IsNecessaryCreateNewFile(DateTime logEntryTime) => logEntryTime.Ticks > createdTimeOfLastFile.Date.Ticks + Config.recreationPeriodInDays * TimeSpan.TicksPerDay;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logEntryTime"></param>
+        /// <returns></returns>
+        private bool IsNecessaryCreateNewFile(DateTime logEntryTime) => logEntryTime > createdTimeOfLastFile.Date.AddDays(Config.recreationPeriodInDays);
         protected override void WriteTo(object logEntry)
         {
             file.Write(logEntry);
             file.Write(Environment.NewLine);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>default при неудаче</returns>
         private DateTime ImportCreatedTimeOfLastFile()
         {
             string fileContent = null;
+            DateTime createdTime = default;
+
             try
             {
                 fileContent = File.ReadAllText(CreatedTimeOfLastLogFile_InfoFilePath);
@@ -130,10 +144,20 @@ namespace StruLog.SM
             {
                 Logger.Important("'CreatedTimeOfLastLogFile' not found, will create new log file for current day");
             }
-            if (String.IsNullOrEmpty(fileContent))
-                return default;
 
-            return Convert.ToDateTime(fileContent, CultureInfo.InvariantCulture);
+            if (string.IsNullOrEmpty(fileContent))
+                return createdTime;
+
+            try
+            {
+                createdTime = Convert.ToDateTime(fileContent, CultureInfo.InvariantCulture);
+            }
+            catch
+            {
+                Logger.Important("'CreatedTimeOfLastLogFile' can't parse, rewrite it.");
+            }
+
+            return createdTime;
         }
         private void CreateFileOnHot()
         {
