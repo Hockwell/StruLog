@@ -101,7 +101,7 @@ namespace StruLog.SM
                         return obj != null ? JsonSerializer.Serialize(obj) : string.Empty;
                     };
                 default:
-                    throw new StruLogConfigException($"Найден неизвестный селектор {selector}. Исправьте его или удалите.");
+                    throw new StruLogConfigException($"Unknown selector '{selector}' detected. Repair it or remove.");
             }
 
         }

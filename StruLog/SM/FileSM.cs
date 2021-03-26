@@ -39,7 +39,7 @@ namespace StruLog.SM
         internal static FileSM Init(FileStore config)
         {
             if (config is null)
-                throw new StruLogConfigException($"Не получена конфигурация для хранилища {NAME}");
+                throw new StruLogConfigException($"Not found configuration for '{NAME}' store");
             if (@this == null)
             {
                 @this = new FileSM(config);
@@ -109,7 +109,7 @@ namespace StruLog.SM
                 case "project":
                     return $"{Directory.GetCurrentDirectory()}";
                 default:
-                    Logger.Important($"Найден неизвестный селектор пути {selector}. Вместо него применён селектор m");
+                    Logger.Important($"Unknown selector '{selector}' detected, selector 'm' will use instead.");
                     return time.Month.ToString();
             }
         }
@@ -128,7 +128,7 @@ namespace StruLog.SM
             }
             catch
             {
-                Trace.WriteLine("Файл с датой последнего создания лог-файла не найден");
+                Logger.Important("'CreatedTimeOfLastLogFile' not found, will create new log file for current day");
             }
             if (String.IsNullOrEmpty(fileContent))
                 return default;
@@ -162,7 +162,7 @@ namespace StruLog.SM
                 }
                 catch
                 {
-                    Trace.WriteLine("Дату последнего создания лог-файла невозможно записать в файл");
+                    Logger.Important("Writing to 'CreatedTimeOfLastLogFile' is impossible. Next log file will create on next day and there is repeat writing attempt");
                 }
 
             }
@@ -176,7 +176,7 @@ namespace StruLog.SM
             }
             catch (Exception ex)
             {
-                Logger.Error($"Невозможно добавить эл-ты в очередь на обработку. Возможно, поток обработки не функционирует.{ex.GetType()}:{ex.Message}");
+                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely, processing thread doesn't work. {ex.GetType()}:{ex.Message}");
             }
 
         }
@@ -191,7 +191,7 @@ namespace StruLog.SM
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Поток обработки логов аварийно прекратил работу.{ex.GetType()}:{ex.Message}");
+                    Logger.Error($"Processing thread is dropped. {ex.GetType()}:{ex.Message}");
                 }
                 ProcessingQueue.CompleteAdding();
             }, TaskCreationOptions.LongRunning);

@@ -29,7 +29,7 @@ namespace StruLog.SM
         internal static ConsoleSM Init(ConsoleStore config)
         {
             if (config is null)
-                throw new StruLogConfigException($"Не получена конфигурация для хранилища {NAME}");
+                throw new StruLogConfigException($"Not found configuration for '{NAME}' store");
             if (@this == null)
             {
                 @this = new ConsoleSM(config);
@@ -44,7 +44,7 @@ namespace StruLog.SM
             }
             catch (Exception ex)
             {
-                Logger.Error($"Невозможно добавить эл-ты в очередь на обработку. Возможно, поток обработки не функционирует.{ex.GetType()}:{ex.Message}");
+                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely, processing thread doesn't work. {ex.GetType()}:{ex.Message}");
             }
         }
         private async Task Log() //Не вынесен как abstract в StoreManager, ибо только при пакетной обработке нет аргументов, а при обычной есть
@@ -98,7 +98,7 @@ namespace StruLog.SM
                     break;
                 default:
                     Console.ForegroundColor = ConsoleColor.White;
-                    Logger.Important($"Не назначен цвет консоли для {logData.level.EnumToString<LogLevel>()}. Установлен White.");
+                    Logger.Important($"There is not handler for '{logData.level.EnumToString<LogLevel>()}' color. Set White.");
                     break;
 
             }
@@ -114,7 +114,7 @@ namespace StruLog.SM
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Поток обработки логов аварийно прекратил работу.{ex.GetType()}:{ex.Message}");
+                    Logger.Error($"Processing thread is dropped. {ex.GetType()}:{ex.Message}");
                 }
                 ProcessingQueue.CompleteAdding();
             }, TaskCreationOptions.LongRunning);

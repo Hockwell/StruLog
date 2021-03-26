@@ -36,7 +36,7 @@ namespace StruLog.SM
         internal static MongoDbSM Init(MongoDBStore config)
         {
             if (config is null)
-                throw new StruLogConfigException($"Не получена конфигурация для хранилища {NAME}");
+                throw new StruLogConfigException($"Not found configuration for '{NAME}' store");
             if (@this == null)
             {
                 @this = new MongoDbSM(config);
@@ -72,7 +72,7 @@ namespace StruLog.SM
             }
             catch (Exception ex)
             {
-                Logger.Error($"Невозможно добавить эл-ты в очередь на обработку.Возможно, поток обработки не функционирует.{ex.GetType()}:{ex.Message}");
+                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely, processing thread doesn't work. {ex.GetType()}:{ex.Message}");
 
             }
         }
@@ -87,7 +87,7 @@ namespace StruLog.SM
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Поток обработки логов аварийно прекратил работу.{ex.GetType()}:{ex.Message}");
+                    Logger.Error($"Processing thread is dropped. {ex.GetType()}:{ex.Message}");
                 }
                 ProcessingQueue.CompleteAdding();
             }, TaskCreationOptions.LongRunning);
@@ -99,7 +99,7 @@ namespace StruLog.SM
             if (logEntryObj is LogDataModel model)
                 logsCollection.InsertOne(model);
             else
-                throw new StruLogException("В Mongo добавляется объект неправильного типа");
+                throw new StruLogException("Detected object with invalid type, when adding to mongo");
 
         }
     }

@@ -38,7 +38,7 @@ namespace StruLog
                 //logger.Trace($"Размер очереди: {queueOccupiedCapacity}%");
                 if (queueOccupiedCapacity > QUEUE_WARNING_OCCUPIED_CAPACITY_PERCENT)
                 {
-                    StoreLogger.Warn($"Очередь заполнена на {queueOccupiedCapacity}%! Обрабатывающий поток не справляется!");
+                    StoreLogger.Warn($"Queue capacity = {queueOccupiedCapacity}%! Processing is too slow!");
                     if (queueOccupiedCapacity == 100)
                     {
                         if (!entriesIgrnoring_startTime_Saved)
@@ -48,7 +48,7 @@ namespace StruLog
                         }
                         logEntriesIgrnoring_endTime = Logger.GetCurrentTime();
                         TimeSpan ignoreTime = logEntriesIgrnoring_endTime - logEntriesIgrnoring_startTime;
-                        StoreLogger.Error($"Новые записи игнорируются в течение {ignoreTime:g}");
+                        StoreLogger.Error($"New logEntries beginning with {ignoreTime:g} not exporting");
                     }
                     else if (entriesIgrnoring_startTime_Saved)
                         entriesIgrnoring_startTime_Saved = false; //теперь если в след. раз заполненность достигнет 100%, рассчитается новое стартовое время
@@ -63,7 +63,7 @@ namespace StruLog
         public LogsBatchProccessor(IBatchProcessingCompatible storeManager, object outputPattern)
         {
             if (!(storeManager is StoreManager))
-                throw new StruLogException("Переданный storeManager не наследуется от базового класса StoreManager");
+                throw new ArgumentException("'storeManager' don't inherits from StoreManager class");
             StoreManager = storeManager;
             StoreLogger = (StoreManager as StoreManager).Logger;
             OutputPattern = outputPattern;
@@ -88,7 +88,7 @@ namespace StruLog
                 }
                 catch (Exception ex)
                 {
-                    StoreLogger.Error($"Не удаётся получить первичный доступ к хранилищу до начала обработки.{ex.GetType()}:{ex.Message}");
+                    StoreLogger.Error($"Can't get initial access to store for processing beginning. {ex.GetType()}:{ex.Message}");
                     await Task.Delay(StoreManager.AccessAttemptsDelays_mSeconds[attemptNum < (StoreManager.AccessAttemptsDelays_mSeconds.Length - 1) ?
                         ++attemptNum : attemptNum]);
                 }
@@ -113,7 +113,7 @@ namespace StruLog
                     }
                     catch (Exception ex)
                     {
-                        StoreLogger.Warn($"Прервался доступ к хранилищу логов.Очередь не разгружается.{ex.GetType()}:{ex.Message}");
+                        StoreLogger.Warn($"Access to store broke off. Queue don't unloaded {ex.GetType()}:{ex.Message}");
                         //останавливаемся на последнем эл-те delaysArray
                         await Task.Delay(StoreManager.AccessAttemptsDelays_mSeconds[attemptNum < StoreManager.AccessAttemptsDelays_mSeconds.Length - 1 ? ++attemptNum : attemptNum]);
                     }

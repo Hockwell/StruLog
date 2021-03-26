@@ -28,7 +28,7 @@ namespace StruLog
             }
             catch (Exception ex)
             {
-                throw new StruLogConfigException($"Не удаётся распарсить конфиг: {ex.Message} {ex.StackTrace}");
+                throw new StruLogConfigException($"Can't parse config: {ex.Message} {ex.StackTrace}");
             }
 
         }
@@ -125,7 +125,7 @@ namespace StruLog
                 return MongoDbSM.Init(Config.stores.mongoDB);
             }
             else
-                throw new StruLogConfigException($"Не найдено хранилище с названием '{storeNameFromConfig}'");
+                throw new StruLogConfigException($"Store '{storeNameFromConfig}' not found");
         }
     }
 
