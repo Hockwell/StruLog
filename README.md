@@ -1,6 +1,6 @@
 # StruLog
 
-- Structural logging to console, file, db with multi-threading and output queues support. Это простой логгер с важными функциями.
+- Structural logging to console, file, MongoDB with multi-threading and output queues support. Это простой логгер с важными функциями.
 - Если достаточно дефолтных возможностей, можете использовать через nuget.
 - Подробности реализации и пути модернизации описаны в документации.
 - Пишите, если найдёте баги, узкие места и др. проблемы.
