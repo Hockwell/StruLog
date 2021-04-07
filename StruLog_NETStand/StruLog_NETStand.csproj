@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Hockwell</Authors>
     <Version>1.4.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -10,11 +11,16 @@
     <Description>Structural logging to Console, File, MongoDB, Telegram with multi-threading, output queues support and open source</Description>
     <AssemblyVersion>1.4.0</AssemblyVersion>
     <FileVersion>1.4.0</FileVersion>
+    <PackageId>StruLog</PackageId>
+    <Product>StruLog</Product>
+    <RootNamespace>StruLog</RootNamespace>
+    <AssemblyName>StruLog</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="2.12.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <PackageReference Include="Telegram.Bot" Version="15.7.1" />
   </ItemGroup>
 

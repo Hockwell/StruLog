@@ -1,33 +1,34 @@
 # StruLog
+- Structural logging to console, file, MongoDB, Telegram with multi-threading and output queues support.
+- Has necessary functions
+- if you satisfied default capabilities, use it through nuget.
+- Production start: 10/2020.
+- .Net Standard
+- More in /docs
+- Leave feedback
 
-- Structural logging to console, file, MongoDB with multi-threading and output queues support. Это простой логгер с важными функциями.
-- Если достаточно дефолтных возможностей, можете использовать через nuget.
-- Подробности реализации и пути модернизации описаны в документации.
-- Пишите, если найдёте баги, узкие места и др. проблемы.
-
-# Использование (start guide)
+# Start guide
 1. Edit config file (example in /docs).
 2. `StruLog.StruLogProvider.Init(configPath)`
-3. (static readonly field on each logged class) `logger = LoggersFactory.GetLogger<MainClass>()` or `logger = LoggersFactory.GetLogger(typeof(MainClass))`[for static MainClass]
+3. (static readonly field on each logged class) `logger = LoggersFactory.GetLogger<ClassName>()` or `logger = LoggersFactory.GetLogger(typeof(ClassName))`[for static ClassName]
 
-Details in /docs
-# Особенности
+## Telegram tuning
+1. Create your telegramBot with name “MyCompanyAllerts” for example. You will receive BOT_TOKEN, print it to config (stores/telegram/token).
+2. if telegram/chats[] is null or empty TelegramStore will wait any input from different users and write their chatId to config. After this procedure StruLog will can send logs for you.
+3. You can connect >1 projects and >1 users to your bot.
+4. If you want add new consumers, call .Init() with options.AddTelegramConsumers = true.
 
-- Необходимые функции для современного логгера имеются
-- Логгеры привязаны к классам и доступ к ним возможен из разных потоков
-- Проект работает в production-е с октября 2020.
+# Basic details
+- 1 logger for 1 class.
+- You can call logger functions from >1 threads.
 
-### Отличия от готовых логгеров
+### Output queue for each logs store
+- Work with each logs store based on demon-thread.
+- Each demon gets logEntry from himself queue and handles it. 
+- Log() call add logInfo to stores queues. 
+- Queues conception help amortizate store access problems (#Mongo connection fail) and unconstant logging perfomance.
+- When queue capacity will be too big, logger notify about it.
 
-- Код открытый - меняйте на своё усмотрение (подробная документация и продуманная архитектура помогут в этом)
-
-### Очереди на вывод и многопоточность
-
-- Каждое хранилище логов работает со своим потоком: консоль, файл и Mongo.
-- Каждый такой поток имеет очередь опред. размера (его можно менять), которую он обрабатывает. Логирующий поток кладёт в эти очереди логи.
-- При сбое какого-либо хранилища (#потеря доступа к БД) очередь будет накапливать несохранённые логи и ожидать доступа, при заполнении очереди на опред. % будет сообщаться в заданное хранилище логов информация об этом, а если очередь уже заполнена полностью - будет показано время, как долго это длится.
-- Логгер сам себя логирует и обо всех проблемах сообщает
-
-### Конфиг
-
-В коде только специфические настройки. Важные и зависящие от проекта настройки содержатся в json-конфиге.
+### Configuration
+- In code: for logic tuning.
+- In json: tuning for concrete project.

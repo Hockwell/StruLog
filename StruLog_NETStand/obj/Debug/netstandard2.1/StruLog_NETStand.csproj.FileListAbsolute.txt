@@ -1,0 +1,9 @@
+C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLog_NETStand\obj\Debug\netstandard2.1\StruLog_NETStand.AssemblyInfoInputs.cache
+C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLog_NETStand\obj\Debug\netstandard2.1\StruLog_NETStand.AssemblyInfo.cs
+C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLog_NETStand\obj\Debug\netstandard2.1\StruLog_NETStand.csproj.CoreCompileInputs.cache
+C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLog_NETStand\obj\Debug\netstandard2.1\StruLog_NETStand.csprojAssemblyReference.cache
+C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLog_NETStand\bin\Debug\netstandard2.1\StruLog.deps.json
+C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLog_NETStand\bin\Debug\netstandard2.1\StruLog.dll
+C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLog_NETStand\bin\Debug\netstandard2.1\StruLog.pdb
+C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLog_NETStand\obj\Debug\netstandard2.1\StruLog.dll
+C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLog_NETStand\obj\Debug\netstandard2.1\StruLog.pdb

@@ -11,7 +11,7 @@ namespace StruLogDemo
 
         static async Task Main(string[] args)
         {
-            StruLog.StruLogProvider.Init("StruLog.json", true);
+            StruLog.StruLogProvider.Init(@"C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLogDemo\StruLog.json", false, new ConfiguringOptions { AddTelegramConsumers = false });
             var task1 = Task.Run(async () => {
                 for (int i = 0; i < 15000; i++)
                 {

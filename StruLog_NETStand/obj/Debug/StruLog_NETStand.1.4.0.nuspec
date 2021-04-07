@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>StruLog_NETStand</id>
+    <version>1.4.0</version>
+    <authors>Hockwell</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <description>Structural logging to Console, File, MongoDB, Telegram with multi-threading, output queues support and open source</description>
+    <tags>logger</tags>
+    <repository url="https://github.com/Hockwell/StruLog" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="MongoDB.Driver" version="2.12.1" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+        <dependency id="System.Collections.Immutable" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Telegram.Bot" version="15.7.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\Владимир\OneDrive\Data\Dev\Src\20\StruLog\StruLog_NETStand\bin\Debug\netstandard2.1\StruLog_NETStand.dll" target="lib\netstandard2.1\StruLog_NETStand.dll" />
+  </files>
+</package>
