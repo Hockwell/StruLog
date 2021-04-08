@@ -13,7 +13,7 @@ namespace StruLog.SM
     /// </summary>
     internal abstract class StringStoreManager : StoreManager
     {
-        internal override object CreateLogEntry(LogData logData, object outputPattern) //TODO: проход по листу паттерна, invoke каждого и конкатенация
+        internal override object CreateLogEntry(LogData logData, object outputPattern)
         {
             StringBuilder logEntry = new StringBuilder();
 

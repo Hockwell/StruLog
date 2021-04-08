@@ -1,6 +1,7 @@
 ﻿using StruLog.Entites;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StruLog.SM
 {
@@ -18,8 +19,8 @@ namespace StruLog.SM
         /// <summary>
         /// Записывает лог в хранилище
         /// </summary>
-        /// <param name="logEntry"></param>
-        abstract protected void WriteTo(object logEntry);
+        /// <param name="logEntry">handled logEntry for output</param>
+        abstract protected Task WriteTo(object logEntry);
         abstract internal object CreateLogEntry(LogData logData, object outputPattern);
 
         internal bool IsLoggingAllowed(LogLevel logEntryLevel)

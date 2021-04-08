@@ -1,10 +1,8 @@
-backup/
+backup
 StruLog/
 StruLog_NETFramew/
-StruLogDemo/bin
-StruLogDemo/obj
-StruLog/bin/
-StruLog/obj/
-StruLog/Properties/
+bin
+obj
+Properties
 *.csproj.user
 readme.txt

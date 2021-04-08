@@ -10,6 +10,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using static StruLog.StringTools;
@@ -176,6 +177,14 @@ namespace StruLog
                 token = telegramFileConfig.Value<string>(nameof(TelegramStore.token)),
             };
 
+            var intensivity = telegramFileConfig.SelectToken(nameof(TelegramStore.intensivity));
+            telegramStoreConfig.intensivity = new TelegramStore.IntensivityControl
+            {
+                enable = intensivity.Value<bool>(nameof(TelegramStore.intensivity.enable)),
+                nMessagesPerPeriod = intensivity.Value<long>(nameof(TelegramStore.intensivity.nMessagesPerPeriod)),
+                period = TimeSpan.Parse(intensivity.Value<string>(nameof(TelegramStore.intensivity.period)))
+            };
+
             var chatIdsFromConfig = telegramFileConfig.SelectToken("chats");
             HashSet<long> chatIds;
             if (chatIdsFromConfig.HasValues)
@@ -195,10 +204,17 @@ namespace StruLog
 
             return telegramStoreConfig;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="telegramConfig"></param>
+        /// <param name="config"></param>
+        /// <param name="chatIds">Must contents Ids from config</param>
         private static void DefineTelegramChatId(JToken telegramConfig, TelegramStore config, HashSet<long> chatIds)
         {
             ReceiveChatIdsFromBot(); //adds to chatIds
+            if (chatIds.Count == 0)
+                throw new StruLogConfigException("Telegram store wasn't configure. Repeat it or turn off Telegram store in config");
             telegramConfig["chats"] = NewtonsoftJsonTools.ConvertIEnumerableToJToken(chatIds);
             config.chatIds = chatIds.ToImmutableList();
 
@@ -206,9 +222,9 @@ namespace StruLog
             void ReceiveChatIdsFromBot()
             {
                 TelegramBotClient client = new TelegramBotClient(config.token);
-                Console.WriteLine("You enabled Telegram Store, require tuning (if it was by error, stop execution and disable telegram store using in config). Send messages to your TelegramBot from required accounts. StruLog will defines chatId for each account and saves it in config file. For finish tunning send through Telegram command '/finish_tuning' or stop execution. WARNING: not only you can get access to your telegramBot now, attentionally see to current log, that only valid users got access to future project logs.");
+                Console.WriteLine("You enabled Telegram Store, require tuning (if it was by error, stop execution and disable telegram store using in config). Send messages to your TelegramBot from required accounts. StruLog will defines chatId for each account and saves it in config file. For finish tunning send through Telegram command 'finish_tuning' or stop execution. WARNING: not only you can get access to your telegramBot now, attentionally see to current log, that only valid users got access to future project logs. \n Detected users:");
 
-                int updatesOffset = 0; //сначала 0 - сервер знает какие апдейты являются новыми для нас, далее это id посл. апдейта из массива + 1
+                int updatesOffset = 0;
                 while (true)
                 {
                     Update[] updates = null;
@@ -218,16 +234,24 @@ namespace StruLog
                         foreach (var update in updates)
                         {
                             Message msg = update.Message;
-                            Console.WriteLine($"Detect user @{msg.From.Username} with chatId:{msg.Chat.Id}");
-                            switch(msg.Text)
+                            Console.WriteLine($"Detected user @{msg.From.Username} with chatId:{msg.Chat.Id}");
+                            updatesOffset = update.Id;
+                            switch (msg.Text)
                             {
-                                case "/finish_tuning":
+                                case "finish_tuning":
+                                    //if (msg.Date.AddSeconds(10) >= DateTime.UtcNow) //block probable fake requests
+                                    //{
+                                    //    Console.WriteLine(@">>> finish_tuning applied. If you have problems with fake finish_tuning requests set true system time");
+
+                                    //    return;
+                                    //}
+                                    client.GetUpdatesAsync(offset: updatesOffset + 1).Wait();
                                     return;
                                 default:
                                     RememberNewTelegramChat(msg.Chat.Id, chatIds);
                                     break;
                             }
-                            updatesOffset = update.Id;
+                            
                         }
                     }
                     catch (Exception e)

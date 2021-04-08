@@ -7,12 +7,12 @@
   "insideLoggingStore": "console",
   "stores": {
     "console": {
-      "outputPattern": "{time} | {loggerName-1} | {msg} {obj} {excClassLine} {excMsg}",
+      "outputPattern": "{time} | {loggerName-1} | {msg} {obj} {excMsg}",
       "minLogLevel": "Trace"
     },
     "file": {
       "path": "{project}/Logs/{y}/{m}/StruLogTest-{d}.log",
-      "outputPattern": "{time} | {logLevel} | {loggerName} | {msg} {obj} {excClassLine} {excMsg} {excStackTrace}",
+      "outputPattern": "{time} | {logLevel} | {loggerName-2} | {msg} {obj} {excMsg} {excStackTrace}",
       "minLogLevel": "Trace",
       "recreationPeriodInDays": 1
     },
@@ -20,7 +20,7 @@
       "connectionString": "mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb",
       "collectionName": "Logs_StruLogTest",
       "dbName": "Steam",
-      "outputPattern": "{time} {logLevel} {loggerName} {msg} {obj} {excClassLine} {excMsg} {excStackTrace}",
+      "outputPattern": "{time} {logLevel} {loggerName} {msg} {obj} {excMsg} {excStackTrace}",
       "minLogLevel": "Info"
     },
     "telegram": {
@@ -28,12 +28,12 @@
       "chats": [
         433410454
       ],
-      "minLogLevel": "Trace",
-      "outputPattern": "{time} {logLevel} {loggerName} {msg} {obj} {excClassLine} {excMsg} {excStackTrace}",
+      "minLogLevel": "Important",
+      "outputPattern": "{time} {logLevel} {loggerName-1} {msg} {obj} {excMsg}",
       "intensivity": {
         "enable": true,
         "nMessagesPerPeriod": 1,
-        "period": "1:00:00"
+        "period": "0:00:20"
       }
     }
   }

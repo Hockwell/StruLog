@@ -20,7 +20,7 @@ namespace StruLog
         /// </summary>
         private class ProcessingQueueChecker
         {
-            private const int QUEUE_WARNING_OCCUPIED_CAPACITY_PERCENT = 85;
+            private const int QUEUE_WARNING_OCCUPIED_CAPACITY_PERCENT = 90;
             private DateTime logEntriesIgrnoring_startTime = default;
             private DateTime logEntriesIgrnoring_endTime = default;
             private bool entriesIgrnoring_startTime_Saved = false;
@@ -69,7 +69,7 @@ namespace StruLog
             OutputPattern = outputPattern;
         }
         /// <summary>
-        /// Анонимные методы могут содержать как async, так и sync-код или быть вовсе пустыми
+        /// Creates logEntry for each store, uses connectFunc and writeToFunc for print to stores. Анонимные методы могут содержать как async, так и sync-код или быть вовсе пустыми
         /// </summary>
         /// <param name="ConnectTo_Func">Логика подключения к хранилищу</param>
         /// <param name="WriteLogEntryTo_Func">Логика экспорта лог-записи в хранилище</param>

@@ -20,7 +20,7 @@ namespace StruLog.SM
         private ConsoleSM(ConsoleStore config)
         {
             Config = config;
-            ProcessingQueueSize = 10_000;
+            ProcessingQueueSize = 100_000;
             ProcessingQueue = new BlockingCollection<LogData>(ProcessingQueueSize);
             AccessAttemptsDelays_mSeconds = new int[] { 1, 2, 3, 4, 7, 12, 20, 30 };
             Logger = LoggersFactory.GetLogger<ConsoleSM>(true);
@@ -50,25 +50,27 @@ namespace StruLog.SM
         private async Task Log() //Не вынесен как abstract в StoreManager, ибо только при пакетной обработке нет аргументов, а при обычной есть
         {
             var logsBatchProcessor = new LogsBatchProccessor<string>(this, Config.outputPattern);
-            Func<Task> ConnectToFunc = async () =>
+            Func<Task> ConnectToFunc = () =>
             {
                 //empty
+                return Task.CompletedTask;
             };
             Func<string, LogData, Task> WriteLogEntryToFunc = async (logEntry, logData) =>
             {
                 var fontColorBefore = Console.ForegroundColor;
                 var backColorBefore = Console.BackgroundColor;
                 SwitchConsoleColorByLogLevel(logData);
-                WriteTo(logEntry);
+                await WriteTo(logEntry);
                 Console.ForegroundColor = fontColorBefore;
                 Console.BackgroundColor = backColorBefore;
             };
             await logsBatchProcessor.Log_Type1Async(ConnectToFunc, WriteLogEntryToFunc);
 
         }
-        protected override void WriteTo(object logEntry)
+        protected override Task WriteTo(object logEntry)
         {
             Console.WriteLine($">>> {logEntry}");
+            return Task.CompletedTask;
         }
         private void SwitchConsoleColorByLogLevel(LogData logData)
         {

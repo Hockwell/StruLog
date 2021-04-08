@@ -56,15 +56,16 @@ namespace StruLog.SM
         private async Task Log()
         {
             var logsBatchProcessor = new LogsBatchProccessor<string>(this, Config.outputPattern);
-            Func<Task> CreateFile_Func = async () =>
+            Func<Task> CreateFile_Func = () =>
             {
                 CreateFileOnHot();
+                return Task.CompletedTask;
             };
             Func<string, LogData, Task> WriteLogEntryTo_Func = async (logEntry, logData) =>
             {
                 if (IsNecessaryCreateNewFile(logData.time))
                     CreateFileOnHot();
-                WriteTo(logEntry);
+                await WriteTo(logEntry);
             };
             await logsBatchProcessor.Log_Type1Async(CreateFile_Func, WriteLogEntryTo_Func);
         }
@@ -126,10 +127,10 @@ namespace StruLog.SM
         /// <param name="logEntryTime"></param>
         /// <returns></returns>
         private bool IsNecessaryCreateNewFile(DateTime logEntryTime) => logEntryTime > createdTimeOfLastFile.Date.AddDays(Config.recreationPeriodInDays);
-        protected override void WriteTo(object logEntry)
+        protected override async Task WriteTo(object logEntry)
         {
-            file.Write(logEntry);
-            file.Write(Environment.NewLine);
+            await file.WriteAsync((string)logEntry);
+            await file.WriteAsync(Environment.NewLine);
         }
         /// <summary>
         /// 

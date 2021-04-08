@@ -29,7 +29,7 @@ namespace StruLog.SM
             Config = config;
             ProcessingQueueSize = 1_000_000;
             ProcessingQueue = new BlockingCollection<LogData>(ProcessingQueueSize);
-            AccessAttemptsDelays_mSeconds = new int[] { 1, 5, 25, 45, 90, 250, 500, 1000 };
+            AccessAttemptsDelays_mSeconds = new int[] { 25, 45, 90, 250, 500, 750, 1000, 3000 };
             Logger = LoggersFactory.GetLogger<MongoDbSM>(true);
             MinLogLevel = config.minLogLevel;
         }
@@ -44,16 +44,22 @@ namespace StruLog.SM
             return @this;
         }
 
+        /// <summary>
+        /// Central method for logging to store
+        /// </summary>
+        /// <returns></returns>
         private async Task Log()
         {
             var logsBatchProcessor = new LogsBatchProccessor<LogDataModel>(this, Config.outputPattern);
-            Func<Task> ConnectTo_Func = async () =>
+            Func<Task> ConnectTo_Func = () =>
             {
                 ConnectTo();
+                return Task.CompletedTask;
             };
-            Func<LogDataModel, LogData, Task> WriteLogEntryTo_Func = async (logEntry, logData) =>
+            Func<LogDataModel, LogData, Task> WriteLogEntryTo_Func = (logEntry, logData) =>
             {
                 WriteTo(logEntry);
+                return Task.CompletedTask;
             };
             await logsBatchProcessor.Log_Type1Async(ConnectTo_Func, WriteLogEntryTo_Func);
 
@@ -94,12 +100,13 @@ namespace StruLog.SM
 
         }
 
-        protected override void WriteTo(object logEntryObj)
+        protected override Task WriteTo(object logEntryObj)
         {
             if (logEntryObj is LogDataModel model)
                 logsCollection.InsertOne(model);
             else
                 throw new StruLogException("Detected object with invalid type, when adding to mongo");
+            return Task.CompletedTask;
 
         }
     }

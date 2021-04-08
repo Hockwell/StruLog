@@ -34,7 +34,7 @@ namespace StruLogDemo
                     {
                         logger.Info("message from Thread B", new { el = 67, zel = 434, lalalachka = "ki" });
                         await Task.Delay(10);
-                        throw new Exception("my custom exception message, frame0");
+                        throw new Exception("my custom exception message");
                     }
                     catch (Exception e)
                     {
@@ -54,7 +54,7 @@ namespace StruLogDemo
         }
         static void lalka()
         {
-            throw new Exception("my custom exception message, frame1");
+            throw new Exception("my custom exception message");
         }
     }
 }
