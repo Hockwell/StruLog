@@ -152,7 +152,7 @@ namespace StruLog.SM
             }
             catch
             {
-                Logger.Important("'CreatedTimeOfLastLogFile (CToLLF)' not found, will create new log file for current day");
+                Console.WriteLine("StruLog: 'CreatedTimeOfLastLogFile (CToLLF)' not found, will create new log file for current day");
             }
 
             if (string.IsNullOrEmpty(fileContent))

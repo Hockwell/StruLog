@@ -31,10 +31,11 @@ namespace StruLog
             if (IsInsideLogger) //самологгирование
             {
                 var sm = ConfigProvider.Config.insideLoggingStore;
-                if (sm is null)
-                    Console.WriteLine($"StruLog initialization event: {logData.loggerName} : {logData.level.EnumToString()} : {logData.message} : {logData.exception?.Message} : {logData.exception?.StackTrace}");
-                else
-                    sm.TryLog(logData);
+                sm.TryLog(logData);
+                //if (sm is null)
+                //    Console.WriteLine($"StruLog initialization event: {logData.loggerName} : {logData.level.EnumToString()} : {logData.message} : {logData.exception?.Message} : {logData.exception?.StackTrace}");
+                //else
+                //    sm.TryLog(logData);
             }
             else
                 foreach (var storeManager in ConfigProvider.Config.usingStores)
