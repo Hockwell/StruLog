@@ -69,8 +69,11 @@ namespace StruLog.SM
             };
             await logsBatchProcessor.Log_Type1Async(CreateFile_Func, WriteLogEntryTo_Func);
         }
-
-        private string RecognizeLogsPathFromConfig()
+        /// <summary>
+        /// asd_{selector}_DSds -> asd_dataByselector_DSds
+        /// </summary>
+        /// <returns></returns>
+        private string ClarifyLogsPathFromConfig()
         {
             StringBuilder logPath = new StringBuilder();
             StringBuilder selector = new StringBuilder();
@@ -104,8 +107,8 @@ namespace StruLog.SM
         }
         private string GetInfoByPathSelector(string selector)
         {
-            var time = Logger.GetCurrentTime(); //данные берутся не из LogData-ы, ибо они не нужны до её создания,
-            //возможно расхождение во времени на пару секунд
+            var time = ConfigProvider.Config.currentTime_Func(); 
+
             switch (selector)
             {
                 case "y":
@@ -116,8 +119,10 @@ namespace StruLog.SM
                     return time.Day.ToString("D2");
                 case "project":
                     return $"{Directory.GetCurrentDirectory()}";
+                case "projectName":
+                    return $"{ConfigProvider.Config.projectName}";
                 default:
-                    Logger.Important($"Unknown selector '{selector}' detected, selector 'm' will use instead.");
+                    Logger.Important($"Unknown selector '{selector}' detected, selector 'm' will be use instead.");
                     return time.Month.ToString();
             }
         }
@@ -159,7 +164,7 @@ namespace StruLog.SM
             }
             catch
             {
-                Logger.Important("'CreatedTimeOfLastLogFile (CToLLF)' can't parse, rewrite it.");
+                Logger.Important("Can't parse 'CreatedTimeOfLastLogFile (CToLLF)', rewrite it.");
             }
 
             return createdTime;
@@ -174,7 +179,7 @@ namespace StruLog.SM
                 file.Close();
             }
 
-            string logFilePath = RecognizeLogsPathFromConfig();
+            string logFilePath = ClarifyLogsPathFromConfig();
             Directory.CreateDirectory(Path.GetDirectoryName(logFilePath));
             file = new StreamWriter(logFilePath, true);
             file.AutoFlush = true; //гарантированно данные должны вписаться в лог, в любой момент программа может упасть
@@ -184,7 +189,7 @@ namespace StruLog.SM
             bool IsFirstFileInitialization() => file == null;
             void SaveCreatedTimeOfLastFile()
             {
-                createdTimeOfLastFile = Logger.GetCurrentTime(); //время запрошено из класса логгера, ибо нужен конфиг с поясом
+                createdTimeOfLastFile = ConfigProvider.Config.currentTime_Func(); //we must use time type from config else files will be replace each other not obvious   
                 try
                 {
                     File.WriteAllText(CreatedTimeOfLastLogFile_InfoFilePath, createdTimeOfLastFile.ToString("d",CultureInfo.InvariantCulture));
@@ -220,7 +225,7 @@ namespace StruLog.SM
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Processing thread is dropped. {ex.GetType()}:{ex.Message}");
+                    Logger.Error($"Processing thread was dropped. {ex.GetType()}:{ex.Message}");
                 }
                 ProcessingQueue.CompleteAdding();
             }, TaskCreationOptions.LongRunning);

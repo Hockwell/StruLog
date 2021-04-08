@@ -43,10 +43,10 @@ namespace StruLog
                     {
                         if (!entriesIgrnoring_startTime_Saved)
                         {
-                            logEntriesIgrnoring_startTime = Logger.GetCurrentTime();
+                            logEntriesIgrnoring_startTime = ConfigProvider.Config.currentTime_Func();
                             entriesIgrnoring_startTime_Saved = true;
                         }
-                        logEntriesIgrnoring_endTime = Logger.GetCurrentTime();
+                        logEntriesIgrnoring_endTime = ConfigProvider.Config.currentTime_Func();
                         TimeSpan ignoreTime = logEntriesIgrnoring_endTime - logEntriesIgrnoring_startTime;
                         StoreLogger.Error($"New logEntries not exporting during the {ignoreTime:g}");
                     }

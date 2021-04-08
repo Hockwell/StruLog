@@ -1,8 +1,10 @@
 {
+  "projectName": "StruLogDemo",
   "time": "LOCAL",
   "usingStores": [
     "console",
-    "telegram"
+    "telegram",
+    "file"
   ],
   "insideLoggingStore": "console",
   "stores": {
@@ -11,25 +13,24 @@
       "minLogLevel": "Trace"
     },
     "file": {
-      "path": "{project}/Logs/{y}/{m}/StruLogTest-{d}.log",
+      "path": "{project}/Logs/{y}/{m}/{projectName}-{d}.log",
       "outputPattern": "{time} | {logLevel} | {loggerName-2} | {msg} {obj} {excMsg} {excStackTrace}",
       "minLogLevel": "Trace",
       "recreationPeriodInDays": 1
     },
     "mongoDB": {
       "connectionString": "mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb",
-      "collectionName": "Logs_StruLogTest",
-      "dbName": "Steam",
+      "collectionName": "Logs_{projectName}",
+      "dbName": "Tests",
       "outputPattern": "{time} {logLevel} {loggerName} {msg} {obj} {excMsg} {excStackTrace}",
       "minLogLevel": "Info"
     },
     "telegram": {
       "token": "",
-      "chats": [
-        433410454
-      ],
+      "chats": null,
       "minLogLevel": "Important",
       "outputPattern": "{time} {logLevel} {loggerName-1} {msg} {obj} {excMsg}",
+      "sendingPeriod": 3000,
       "intensivity": {
         "enable": true,
         "nMessagesPerPeriod": 10,

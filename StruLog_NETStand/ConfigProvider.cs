@@ -99,7 +99,7 @@ namespace StruLog
                 connectionString = mongoDB.Value<string>(nameof(MongoDBStore.connectionString)),
                 minLogLevel = mongoDB.Value<string>(nameof(MongoDBStore.minLogLevel)).StringToEnum<LogLevel>(),
                 outputPattern = DbStoreManager.GetOutputActions(mongoDB.Value<string>(nameof(MongoDBStore.outputPattern))),
-                collectionName = mongoDB.Value<string>(nameof(MongoDBStore.collectionName)),
+                collectionName = mongoDB.Value<string>(nameof(MongoDBStore.collectionName)).Replace("{projectName}",Config.projectName),
                 dbName = mongoDB.Value<string>(nameof(MongoDBStore.dbName))
             };
             return mongoDBStore;
@@ -118,8 +118,23 @@ namespace StruLog
         }
         private static void ParseTime()
         {
-            string time = jsonDoc.Value<string>(nameof(Config.time));
-            Config.time = time.StringToEnum<TimeRepresentation>();
+            string timeRaw = jsonDoc.Value<string>("time");
+            TimeRepresentation time = timeRaw.StringToEnum<TimeRepresentation>();
+            Config.currentTime_Func = GetTimeFunc();
+
+            Func<DateTime> GetTimeFunc()
+            {
+                switch (time)
+                {
+                    case TimeRepresentation.LOCAL:
+                        return () => DateTime.Now;
+                    case TimeRepresentation.UTC:
+                        return () => DateTime.UtcNow;
+                    default:
+                        Console.WriteLine("StruLog: Time format not found in config, will be set UTC format.");
+                        return () => DateTime.UtcNow;
+                }
+            }
         }
 
         private static void ParseInsideLoggingStore()
@@ -185,16 +200,27 @@ namespace StruLog
                 minLogLevel = telegramFileConfig.Value<string>(nameof(Store.minLogLevel)).StringToEnum<LogLevel>(),
                 outputPattern = StringStoreManager.GetOutputActions(telegramFileConfig.Value<string>(nameof(TelegramStore.outputPattern))),
                 token = telegramFileConfig.Value<string>(nameof(TelegramStore.token)),
-                sendingPeriod = telegramFileConfig.Value<int>(nameof(TelegramStore.sendingPeriod))
             };
 
-            var intensivity = telegramFileConfig.SelectToken(nameof(TelegramStore.intensivity));
-            telegramStoreConfig.intensivity = new TelegramStore.IntensivityControl
+            int sendingPeriod = telegramFileConfig.Value<int>(nameof(TelegramStore.sendingPeriod));
+            if (sendingPeriod < 1000)
             {
-                enable = intensivity.Value<bool>(nameof(TelegramStore.intensivity.enable)),
-                nMessagesPerPeriod = intensivity.Value<long>(nameof(TelegramStore.intensivity.nMessagesPerPeriod)),
-                period = TimeSpan.Parse(intensivity.Value<string>(nameof(TelegramStore.intensivity.period)))
-            };
+                Console.WriteLine(@"StruLog: telegram/sendingPeriod (see config) must be >= 1000, will be set to 3000");
+                telegramStoreConfig.sendingPeriod = 3000;
+            }
+            else
+                telegramStoreConfig.sendingPeriod = sendingPeriod;
+
+            var intensivity = telegramFileConfig.SelectToken(nameof(TelegramStore.intensivity));
+            if (intensivity?.HasValues ?? false)
+                telegramStoreConfig.intensivity = new TelegramStore.IntensivityControl
+                {
+                    enable = intensivity.Value<bool>(nameof(TelegramStore.intensivity.enable)),
+                    nMessagesPerPeriod = intensivity.Value<long>(nameof(TelegramStore.intensivity.nMessagesPerPeriod)),
+                    period = TimeSpan.Parse(intensivity.Value<string>(nameof(TelegramStore.intensivity.period)))
+                };
+            else
+                telegramStoreConfig.intensivity = new TelegramStore.IntensivityControl { enable = false };
 
             var chatIdsFromConfig = telegramFileConfig.SelectToken("chats");
             HashSet<long> chatIds;

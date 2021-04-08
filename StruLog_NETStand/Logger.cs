@@ -17,7 +17,7 @@ namespace StruLog
 
         internal void Log(LogLevel level, string message, object obj = null, Exception exception = null)
         {
-            var time = GetCurrentTime();
+            var time = ConfigProvider.Config.currentTime_Func();
             var logData = new LogData
             {
                 level = level,
@@ -42,19 +42,6 @@ namespace StruLog
                     storeManager.TryLog(logData);
                 }
 
-        }
-
-        internal static DateTime GetCurrentTime()
-        {
-            switch (ConfigProvider.Config.time)
-            {
-                case TimeRepresentation.LOCAL:
-                    return DateTime.Now;
-                case TimeRepresentation.UTC:
-                    return DateTime.UtcNow;
-                default:
-                    return DateTime.Now;
-            }
         }
     }
 }
