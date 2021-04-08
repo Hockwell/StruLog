@@ -1,5 +1,6 @@
 backup
 StruLog
+StruLogDemo/*.json
 StruLog_NETFramew/
 bin
 obj

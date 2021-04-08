@@ -24,7 +24,7 @@
       "minLogLevel": "Info"
     },
     "telegram": {
-      "token": "1605677603:AAHBaqroG8yLpQG22txS36i6rOkOK4zm4aU",
+      "token": "",
       "chats": [
         433410454
       ],
@@ -32,8 +32,8 @@
       "outputPattern": "{time} {logLevel} {loggerName-1} {msg} {obj} {excMsg}",
       "intensivity": {
         "enable": true,
-        "nMessagesPerPeriod": 1,
-        "period": "0:00:20"
+        "nMessagesPerPeriod": 10,
+        "period": "0:30:00"
       }
     }
   }

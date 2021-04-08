@@ -6,6 +6,7 @@ using StruLog.SM;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -105,6 +106,7 @@ namespace StruLog.SM
             try
             {
                 ProcessingQueue.TryAdd(logData);
+                //Trace.WriteLine(ProcessingQueue.Count);
             }
             catch (Exception ex)
             {

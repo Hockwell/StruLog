@@ -8,7 +8,7 @@
 - Leave feedback
 
 # Start guide
-1. Edit config file (example in /docs).
+1. Edit json-config file (example in docs/).
 2. `StruLog.StruLogProvider.Init(configPath)`
 3. (static readonly field on each logged class) `logger = LoggersFactory.GetLogger<ClassName>()` or `logger = LoggersFactory.GetLogger(typeof(ClassName))`[for static ClassName]
 
