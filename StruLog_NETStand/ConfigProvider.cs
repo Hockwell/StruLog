@@ -41,6 +41,7 @@ namespace StruLog
             {
                 jsonDoc = JObject.Parse(configFileContent);
                 Config.stores = new StoresSettings();
+                ParseProjectName();
                 ParseUsingStores();
                 ParseTime();
                 ParseInsideLoggingStore();
@@ -52,6 +53,15 @@ namespace StruLog
             }
 
         }
+
+        private static void ParseProjectName()
+        {
+            string value = jsonDoc.Value<string>(nameof(Config.projectName));
+            if (string.IsNullOrEmpty(value))
+                throw new StruLogConfigException($"{nameof(Config.projectName)} must be not null and not empty");
+            Config.projectName = value;
+        }
+
         private static ConsoleStore ParseConsoleStoreSettings()
         {
             var stores = jsonDoc.SelectToken(nameof(Config.stores));
@@ -175,6 +185,7 @@ namespace StruLog
                 minLogLevel = telegramFileConfig.Value<string>(nameof(Store.minLogLevel)).StringToEnum<LogLevel>(),
                 outputPattern = StringStoreManager.GetOutputActions(telegramFileConfig.Value<string>(nameof(TelegramStore.outputPattern))),
                 token = telegramFileConfig.Value<string>(nameof(TelegramStore.token)),
+                sendingPeriod = telegramFileConfig.Value<int>(nameof(TelegramStore.sendingPeriod))
             };
 
             var intensivity = telegramFileConfig.SelectToken(nameof(TelegramStore.intensivity));
@@ -222,7 +233,7 @@ namespace StruLog
             void ReceiveChatIdsFromBot()
             {
                 TelegramBotClient client = new TelegramBotClient(config.token);
-                Console.WriteLine("You enabled Telegram Store, require tuning (if it was by error, stop execution and disable telegram store using in config). Send messages to your TelegramBot from required accounts. StruLog will defines chatId for each account and saves it in config file. For finish tunning send through Telegram command 'finish_tuning' or stop execution. WARNING: not only you can get access to your telegramBot now, attentionally see to current log, that only valid users got access to future project logs. \n Detected users:");
+                Console.WriteLine("You enabled Telegram Store, require tuning (if it was by error, stop execution and disable telegram store using in config). Send messages to your TelegramBot from required accounts. StruLog will defines chatId for each account and saves it in config file. For finish tunning send through Telegram command 'finish_tuning' or stop execution. WARNING: not only you can get access to your telegramBot now, attentionally see to current log, that only valid users got access to future project logs. \n The process of remembering of users:");
 
                 int updatesOffset = 0;
                 while (true)
@@ -234,7 +245,7 @@ namespace StruLog
                         foreach (var update in updates)
                         {
                             Message msg = update.Message;
-                            Console.WriteLine($"Detected user @{msg.From.Username} with chatId:{msg.Chat.Id}");
+                            Console.WriteLine($"Detected user @{msg.From.Username} ({msg.From.FirstName} {msg.From.LastName}) with chatId:{msg.Chat.Id}");
                             updatesOffset = update.Id;
                             switch (msg.Text)
                             {

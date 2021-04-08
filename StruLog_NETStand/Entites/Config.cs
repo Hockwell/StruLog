@@ -11,5 +11,9 @@ namespace StruLog.Entites
         internal TimeRepresentation time;
         internal StoresSettings stores;
         internal StoreManager insideLoggingStore;
+        /// <summary>
+        /// Special project name for logger operations
+        /// </summary>
+        internal string projectName;
     }
 }

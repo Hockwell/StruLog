@@ -16,10 +16,6 @@ namespace StruLog.SM
     internal class TelegramSM : StringStoreManager, IBatchProcessingCompatible
     {
         internal const string NAME = "telegram";
-        /// <summary>
-        /// in ms
-        /// </summary>
-        internal const int SENDING_PERIOD = 3000;
         internal static TelegramBotClient Client {get; private set;}
         internal TelegramHandlingIntensivity Intensivity { get; private set; }
 
@@ -82,9 +78,9 @@ namespace StruLog.SM
             }
             foreach (var chatId in Config.chatIds)
             {
-                await Client.SendTextMessageAsync(chatId, $"<code>{logEntry}</code>", parseMode:Telegram.Bot.Types.Enums.ParseMode.Html);
+                await Client.SendTextMessageAsync(chatId, $"<code>{logEntry}</code>\n#{ConfigProvider.Config.projectName}", parseMode:Telegram.Bot.Types.Enums.ParseMode.Html);
             }
-            await Task.Delay(SENDING_PERIOD); //because TelegramBot work too slow
+            await Task.Delay(Config.sendingPeriod); //because TelegramBot work too slow
         }
 
         /// <summary>

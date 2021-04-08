@@ -13,6 +13,10 @@ namespace StruLog.Entites.Stores
         internal string token;
         internal ImmutableList<long> chatIds;
         internal IntensivityControl intensivity;
+        /// <summary>
+        /// send messages each ... ms
+        /// </summary>
+        internal int sendingPeriod;
 
         internal class IntensivityControl 
         {
