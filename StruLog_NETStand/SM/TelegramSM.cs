@@ -16,6 +16,10 @@ namespace StruLog.SM
     internal class TelegramSM : StringStoreManager, IBatchProcessingCompatible
     {
         internal const string NAME = "telegram";
+        /// <summary>
+        /// Без учета символов форматирования
+        /// </summary>
+        private const ushort POST_MAX_LENGTH = 4_096;
         internal static TelegramBotClient Client {get; private set;}
         internal TelegramHandlingIntensivity Intensivity { get; private set; }
 
@@ -78,7 +82,14 @@ namespace StruLog.SM
             }
             foreach (var chatId in Config.chatIds)
             {
-                await Client.SendTextMessageAsync(chatId, $"<code>{logEntry}</code>\n#{ConfigProvider.Config.projectName}", parseMode:Telegram.Bot.Types.Enums.ParseMode.Html);
+                string tag = $"\n#{ConfigProvider.Config.projectName}";
+                string log = (logEntry as string);
+                if (log.Length + tag.Length > POST_MAX_LENGTH)
+                {
+                    log = log.Substring(0, POST_MAX_LENGTH - 4 - tag.Length) + "...";
+                }
+                log = log.Replace('<', '[').Replace('>', ']');
+                await Client.SendTextMessageAsync(chatId, $"<code>{log}</code>{tag}", parseMode: Telegram.Bot.Types.Enums.ParseMode.Html);
             }
             await Task.Delay(Config.sendingPeriod); //because TelegramBot work too slow
         }
