@@ -1,5 +1,4 @@
 # StruLog
-- Structural logging to console, file, MongoDB, Telegram[BETA] with multi-threading and output queues support.
 - Has necessary functions
 - if you satisfied default capabilities, use it through nuget.
 - Using in Production began from 10/2020.
