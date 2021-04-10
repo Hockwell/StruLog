@@ -88,7 +88,7 @@ namespace StruLog
                 }
                 catch (Exception ex)
                 {
-                    StoreLogger.Error($"Can't get initial access to store for processing beginning. {ex.GetType()}:{ex.Message}");
+                    StoreLogger.Error($"Can't get initial access to store for processing beginning. | {ex.GetType()}:{ex.Message}");
                     await Task.Delay(StoreManager.AccessAttemptsDelays_mSeconds[attemptNum < (StoreManager.AccessAttemptsDelays_mSeconds.Length - 1) ?
                         ++attemptNum : attemptNum]);
                 }
@@ -113,7 +113,7 @@ namespace StruLog
                     }
                     catch (Exception ex)
                     {
-                        StoreLogger.Warn($"Access to store broke off. Queue don't unloaded {ex.GetType()}:{ex.Message}");
+                        StoreLogger.Warn($"Access to store was broke off. Queue don't unloaded. | {ex.GetType()}:{ex.Message}");
                         //останавливаемся на последнем эл-те delaysArray
                         await Task.Delay(StoreManager.AccessAttemptsDelays_mSeconds[attemptNum < StoreManager.AccessAttemptsDelays_mSeconds.Length - 1 ? ++attemptNum : attemptNum]);
                     }
