@@ -31,4 +31,4 @@
 - When occupied queue capacity will be too big, logger notifies about it.
 
 ### HighLoad tests
-You can made your tests, clone rep, call imitation methods and run StruLogDemo with different stores on long period. If logger can't provides required performance, queue occupied capacity will be constantly increase. You can print queues occupation to console for example.
+You can made your tests, clone rep, set Release config, call imitation methods and run StruLogDemo with different stores on long period. If logger can't provides required performance, queue occupied capacity will be constantly increase. You can print queues occupation to console for example.
