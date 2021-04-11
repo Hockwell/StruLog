@@ -205,7 +205,7 @@ namespace StruLog
             int sendingPeriod = telegramFileConfig.Value<int>(nameof(TelegramStore.sendingPeriod));
             if (sendingPeriod < 1000)
             {
-                Console.WriteLine(@"StruLog: telegram/sendingPeriod (see config) must be >= 1000, will be set to 3000");
+                Console.WriteLine(@"StruLog: telegram/sendingPeriod (see config) must be >= 1000, will be 3000");
                 telegramStoreConfig.sendingPeriod = 3000;
             }
             else

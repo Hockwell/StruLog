@@ -30,7 +30,7 @@
       "chats": null,
       "minLogLevel": "Important",
       "outputPattern": "{time} {logLevel} {loggerName-1} {msg} {obj} {excMsg}",
-      "sendingPeriod": 3000,
+      "sendingPeriod": 1000,
       "intensivity": {
         "enable": true,
         "nMessagesPerPeriod": 10,
