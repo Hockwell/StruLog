@@ -8,3 +8,4 @@ Properties
 packages
 *.csproj.user
 readme.txt
+.vs
