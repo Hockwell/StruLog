@@ -30,7 +30,8 @@ namespace StruLog.SM
 
         static FileSM()
         {
-            string prjName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name ?? "unknownNameOfPrj";
+            //string prjName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name ?? "unknownNameOfPrj";
+            string prjName = ConfigProvider.Config.projectName;
             CreatedTimeOfLastLogFile_InfoFilePath = $@"{AppContext.BaseDirectory}/CToLLF_{prjName}";
         }
         private FileSM(FileStore config)
