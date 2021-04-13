@@ -29,6 +29,8 @@ Selectors:
 - m – month,
 - d – day,
 - project – runtime-directory of project.
+
+Example: "{project}/../../Logs/{y}/{m}/{projectName}-{d}.log"
 #### insideLoggingStore
 Store which using for StruLog events output.
 # Basic details
