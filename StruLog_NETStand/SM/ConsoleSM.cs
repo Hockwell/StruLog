@@ -22,7 +22,7 @@ namespace StruLog.SM
             Config = config;
             ProcessingQueueSize = 100_000;
             ProcessingQueue = new BlockingCollection<LogData>(ProcessingQueueSize);
-            AccessAttemptsDelays_mSeconds = new int[] { 1, 2, 3, 4, 7, 12, 20, 30 };
+            AccessAttemptsDelays_mSeconds = new int[] { 1, 3, 6, 10, 15, 25, 30, 40 };
             Logger = LoggersFactory.GetLogger<ConsoleSM>(true);
             MinLogLevel = config.minLogLevel;
         }
