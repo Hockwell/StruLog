@@ -12,8 +12,8 @@
 3. (static readonly field on each logged class) `logger = LoggersFactory.GetLogger<ClassName>()` or `logger = LoggersFactory.GetLogger(typeof(ClassName))`[for static ClassName]
 
 ## Telegram tuning (alerts only, not logs storage)
-1. Create your telegramBot with name “MyCompanyAlerts” for example. You will receive BOT_TOKEN, enter this to config (stores/telegram/token).
-2. if telegram/chats[] is null or empty, logger with his TelegramBotServer will wait any input from different Telegram users and write their chatId to config. After this procedure StruLog will can to send logs for you.
+1. Create your telegramBot with name “MyCompanyAlerts” for example. You will receive BOT_TOKEN, enter this to config (stores/telegram/token). Run the project. 
+2. if telegram/chats[] is null or empty, StruLog will wait any input from different Telegram users and write their chatId to config. Read the console for correct actions and finish procedure. After this StruLog will can to send logs to telegram chats.
 3. You can connect >1 projects and >1 users to your bot.
 4. If you want connect new consumers (add to existing consumers) to TelegramBot, call ```.Init()```(item 2) with ```options.AddTelegramConsumers = true```.
 5. Attention! Speed control (config/telegram/sendingPeriod) required, because telegram handles messages too slow (1 post per 1 sec on 1 user and it's max mean speed). Logger handler set speed by 'sendingPeriod' field (=1000ms by default), but queue may overflow anyway. You must tighten Speed control and increase 'sendingPeriod' if >1 projects sending to bot (for example, for 2 projects on 1 bot you can set 'sendingPeriod'=2000ms in theory). If messages stop coming: stop execute and increase 'sendingPeriod' (likely required waiting that telegram server will drop temporary limitation on sending). 
