@@ -17,7 +17,7 @@
 3. You can connect >1 projects and >1 users to your bot.
 4. If you want connect new consumers (add to existing consumers) to TelegramBot, call ```.Init()```(item 2) with ```options.AddTelegramConsumers = true```.
 5. Attention! Speed control (config/telegram/sendingPeriod) required, because telegram handles messages too slow (1 post per 1 sec on 1 user and it's max mean speed). Logger handler set speed by 'sendingPeriod' field (=1000ms by default), but queue may overflow anyway. You must tighten Speed control and increase 'sendingPeriod' if >1 projects sending to bot (for example, for 2 projects on 1 bot you can set 'sendingPeriod'=2000ms in theory). If messages stop coming: stop execute and increase 'sendingPeriod' (likely required waiting that telegram server will drop temporary limitation on sending). 
-6. Intensivity control (config/telegram/intensivity) ignores logs (removes from queue without handling) after limit was reached, so you will receive fresh logs when the limitation be dropped.
+6. Intensity control (config/telegram/intensivity) ignores logs (removes from queue without handling) after limit was reached, so you will receive fresh logs when the limitation be dropped.
 
 ## Config content
 #### projectName
@@ -41,7 +41,7 @@ Store which using for StruLog events output.
 - Work with each logs store based on demon-thread.
 - Each demon gets logEntry from himself queue and handles it. 
 - Log() call adds logInfo to stores queues. 
-- Queues conception help amortizate store access problems (#Mongo connection fail) and unconstant logging perfomance.
+- Queues conception help amortize store access problems (#Mongo connection fail) and non-constant logging intensity.
 - When occupied queue capacity will be too big, logger notifies about it.
 
 ### HighLoad tests
