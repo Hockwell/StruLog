@@ -4,7 +4,7 @@
 - Using in Production began from 10/2020.
 - .Net Standard
 - More in /docs
-- Leave feedback
+- Leaves feedback
 
 # Start guide
 1. Edit json-config file (example in docs/).
