@@ -34,7 +34,8 @@ You can use {projectName} selector in mongo/collectionName and file/path.
 -	`time`
 -	`logLevel`
 -	`obj`
--	`loggerName` – monitored class full name (with namespace); `loggerName-i` allows cut over fullname(`MyCode.ChuckMustFly.Alg1`) and returns i-segment from right (i=1 => `Alg1`, i=2 => `ChuckMustFly.Alg1`), i:1,9.
+-	`loggerName` – monitored class full name (with namespace)
+-	`loggerName-i` (doesn't work with mongo) allows cut over fullname(`MyCode.ChuckMustFly.Alg1`) and returns the i-th segment from the right (i=1 => `Alg1`, i=2 => `ChuckMustFly.Alg1`), i:1,9.
 
 #### file/path
 Selectors:
