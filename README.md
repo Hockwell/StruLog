@@ -27,14 +27,14 @@
 Field with name of current project. Deliberately didn’t make automatic definition of this name that users can select more comfortable name.
 You can use {projectName} selector in mongo/collectionName and file/path.
 #### outputPattern (selectors)
--	msg
--	excMsg
--	excClassLine – class and row where exception throwed (0 and 1 stack frames)
--	excStackTrace
--	time
--	logLevel
--	obj
--	loggerName – class full name (with namespace); loggerName-i allows cut over fullname(MyCode.ChuckMustFly.Alg1) and returns i-segment from right (i=1 => Alg1, i=2 => ChuckMustFly.Alg1); i:1,9.
+-	`msg`
+-	`excMsg`
+-	`excClassLine` – class and row where exception throwed (0 and 1 stack frames)
+-	`excStackTrace`
+-	`time`
+-	`logLevel`
+-	`obj`
+-	`loggerName` – monitored class full name (with namespace); `loggerName-i` allows cut over fullname(`MyCode.ChuckMustFly.Alg1`) and returns i-segment from right (i=1 => `Alg1`, i=2 => `ChuckMustFly.Alg1`), i:1,9.
 
 #### file/path
 Selectors:
