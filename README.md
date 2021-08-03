@@ -8,8 +8,8 @@
 
 # Start guide
 1. Edit json-config file (example in docs/).
-2. `StruLog.StruLogProvider.Init(configPath, inProjectDir)`. inProjectDir=false (default value) if configPath is full, true if config file placed in runtime directory, then configPath is name, not full path.
-3. (static readonly field on each logged class) `logger = LoggersFactory.GetLogger<ClassName>()` or `logger = LoggersFactory.GetLogger(typeof(ClassName))`[for static ClassName]
+2. `StruLog.StruLogProvider.Init(configPath, inProjectDir)`. inProjectDir=false (default value) if configPath is full, true if config file placed in runtime directory - then configPath is name, not full path.
+3. (static readonly field on each logged class) `logger = LoggersFactory.GetLogger<ClassName>()` or `logger = LoggersFactory.GetLogger(typeof(ClassName))`[for static ClassName class]
 
 ## Telegram tuning (alerts only, not logs storage)
 1. Create your telegramBot with name “MyCompanyAlerts” for example. You will receive BOT_TOKEN, enter this to config (stores/telegram/token). Run the project. 
@@ -20,9 +20,22 @@
 6. Intensity control (config/telegram/intensivity) ignores logs (removes from queue without handling) after limit was reached, so you will receive fresh logs when the limitation be dropped.
 
 ## Config content
+#### time
+- UTC
+- LOCAL
 #### projectName
 Field with name of current project. Deliberately didn’t make automatic definition of this name that users can select more comfortable name.
 You can use {projectName} selector in mongo/collectionName and file/path.
+#### outputPattern (selectors)
+-	msg
+-	excMsg
+-	excClassLine – class and row where exception throwed (0 and 1 stack frames)
+-	excStackTrace
+-	time
+-	logLevel
+-	obj
+-	loggerName – class full name (with namespace); loggerName-i allows cut over fullname(MyCode.ChuckMustFly.Alg1) and returns i-segment from right (i=1 => Alg1, i=2 => ChuckMustFly.Alg1); i:1,9.
+
 #### file/path
 Selectors:
 - y – year,
@@ -32,7 +45,7 @@ Selectors:
 
 Example: "{project}/../../Logs/{y}/{m}/{projectName}-{d}.log"
 #### insideLoggingStore
-Store which using for StruLog events output.
+Store (=storage) which using for StruLog events output.
 # Basic details
 - 1 logger for 1 class.
 - You can call out Log() functions from >1 threads.
