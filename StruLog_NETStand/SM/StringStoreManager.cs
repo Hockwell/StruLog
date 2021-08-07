@@ -110,7 +110,7 @@ namespace StruLog.SM
                         return obj != null ? JsonConvert.SerializeObject(obj) : string.Empty;
                     };
                 default:
-                    throw new StruLogConfigException($"Unknown selector '{selector}' detected. Repair it or remove.");
+                    throw new StruLogConfigException($"Unknown selector '{selector}' detected. Repair or remove.");
             }
 
         }

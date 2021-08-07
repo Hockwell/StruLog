@@ -23,7 +23,7 @@ namespace StruLog
             private const int QUEUE_WARNING_OCCUPIED_CAPACITY_PERCENT = 90;
             private DateTime logEntriesIgrnoring_startTime = default;
             private DateTime logEntriesIgrnoring_endTime = default;
-            private bool entriesIgrnoring_startTime_Saved = false;
+            private bool IsSavedOfEntriesIgrnoringStartTime = false;
             private Logger StoreLogger;
             private BlockingCollection<LogData> Queue;
             public ProcessingQueueChecker(Logger storeLogger, BlockingCollection<LogData> queue)
@@ -41,17 +41,17 @@ namespace StruLog
                     StoreLogger.Warn($"Queue capacity = {queueOccupiedCapacity}%! Processing is too slow!");
                     if (queueOccupiedCapacity == 100)
                     {
-                        if (!entriesIgrnoring_startTime_Saved)
+                        if (!IsSavedOfEntriesIgrnoringStartTime)
                         {
                             logEntriesIgrnoring_startTime = ConfigProvider.Config.currentTime_Func();
-                            entriesIgrnoring_startTime_Saved = true;
+                            IsSavedOfEntriesIgrnoringStartTime = true;
                         }
                         logEntriesIgrnoring_endTime = ConfigProvider.Config.currentTime_Func();
                         TimeSpan ignoreTime = logEntriesIgrnoring_endTime - logEntriesIgrnoring_startTime;
                         StoreLogger.Error($"New logEntries not exporting during the {ignoreTime:g}");
                     }
-                    else if (entriesIgrnoring_startTime_Saved)
-                        entriesIgrnoring_startTime_Saved = false; //теперь если в след. раз заполненность достигнет 100%, рассчитается новое стартовое время
+                    else if (IsSavedOfEntriesIgrnoringStartTime)
+                        IsSavedOfEntriesIgrnoringStartTime = false; //теперь если в след. раз заполненность достигнет 100%, рассчитается новое стартовое время
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace StruLog
         public LogsBatchProccessor(IBatchProcessingCompatible storeManager, object outputPattern)
         {
             if (!(storeManager is StoreManager))
-                throw new ArgumentException("'storeManager' don't inherits from StoreManager class");
+                throw new ArgumentException("'storeManager's class don't inherits from StoreManager class");
             StoreManager = storeManager;
             StoreLogger = (StoreManager as StoreManager).Logger;
             OutputPattern = outputPattern;
@@ -95,7 +95,7 @@ namespace StruLog
             }
 
             queueChecker = new ProcessingQueueChecker(StoreLogger, StoreManager.ProcessingQueue);//новый отчёт
-            foreach (var logData in StoreManager.ProcessingQueue.GetConsumingEnumerable()) //фоновый поток мониторит очередь
+            foreach (var logData in StoreManager.ProcessingQueue.GetConsumingEnumerable()) //Мониторит очередь
             {
                 if (!(StoreManager as StoreManager).IsLoggingAllowed(logData.level))
                     continue;
@@ -113,7 +113,7 @@ namespace StruLog
                     }
                     catch (Exception ex)
                     {
-                        StoreLogger.Warn($"Access to store was broke off. Queue don't unloaded. | {ex.GetType()}:{ex.Message}");
+                        StoreLogger.Warn($"Access to store was broke off. Queue was not unloaded. | {ex.GetType()}:{ex.Message}");
                         //останавливаемся на последнем эл-те delaysArray
                         await Task.Delay(StoreManager.AccessAttemptsDelays_mSeconds[attemptNum < StoreManager.AccessAttemptsDelays_mSeconds.Length - 1 ? ++attemptNum : attemptNum]);
                     }

@@ -9,3 +9,4 @@ packages
 *.csproj.user
 readme.txt
 .vs
+*.log

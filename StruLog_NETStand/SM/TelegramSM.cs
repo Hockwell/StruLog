@@ -36,7 +36,7 @@ namespace StruLog.SM
             Config = config;
             ProcessingQueueSize = 100_000;
             ProcessingQueue = new BlockingCollection<LogData>(ProcessingQueueSize);
-            AccessAttemptsDelays_mSeconds = new int[] { 25, 45, 90, 250, 500, 750, 1000, 3000 };
+            AccessAttemptsDelays_mSeconds = new int[] { 25, 45, 90, 250, 500, 1000, 3000, 5000 };
             Logger = LoggersFactory.GetLogger<TelegramSM>(true);
             MinLogLevel = config.minLogLevel;
             if (Config.intensivity.enable)

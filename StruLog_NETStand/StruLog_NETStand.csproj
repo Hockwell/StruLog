@@ -4,13 +4,13 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Hockwell</Authors>
-    <Version>1.4.1.3</Version>
+    <Version>1.5.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/Hockwell/StruLog</RepositoryUrl>
     <PackageTags>logger</PackageTags>
     <Description>Structural logging to Console, File, MongoDB, Telegram with multi-threading, output queues support and open source</Description>
-    <AssemblyVersion>1.4.1.3</AssemblyVersion>
-    <FileVersion>1.4.1.3</FileVersion>
+    <AssemblyVersion>1.5.0</AssemblyVersion>
+    <FileVersion>1.5.0</FileVersion>
     <PackageId>StruLog</PackageId>
     <Product>StruLog</Product>
     <RootNamespace>StruLog</RootNamespace>
@@ -18,10 +18,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.12.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
-    <PackageReference Include="Telegram.Bot" Version="15.7.1" />
+    <PackageReference Include="Telegram.Bot" Version="16.0.2" />
   </ItemGroup>
 
 </Project>

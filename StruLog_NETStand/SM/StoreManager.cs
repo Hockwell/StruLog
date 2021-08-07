@@ -7,9 +7,9 @@ namespace StruLog.SM
 {
     internal abstract class StoreManager
     {
-        protected const char SELECTOR_START_CHAR = '{'; //общий формат селекторов, можно поменять, если указанные символы используются для чего-то ещё в конфиге
+        protected const char SELECTOR_START_CHAR = '{';
         protected const char SELECTOR_END_CHAR = '}';
-        internal Logger Logger; //у каждого SM-а есть логгер
+        internal Logger Logger;
         protected LogLevel MinLogLevel;
         /// <summary>
         /// Инициирует обработку лога хранилищем
@@ -57,7 +57,7 @@ namespace StruLog.SM
         {
             if (logData.exception is null)
                 return null;
-            return $"{ logData.exception.GetType()}:{ logData.exception.Message }";
+            return $"{ logData.exception.GetType()}: { logData.exception.Message }";
         }
         internal static void RunProcessing()
         {

@@ -44,7 +44,7 @@ namespace StruLog.SM
             }
             catch (Exception ex)
             {
-                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely, processing thread doesn't work. {ex.GetType()}:{ex.Message}");
+                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely processing thread doesn't working. {ex.GetType()}:{ex.Message}");
             }
         }
         private async Task Log() //Не вынесен как abstract в StoreManager, ибо только при пакетной обработке нет аргументов, а при обычной есть
@@ -100,7 +100,7 @@ namespace StruLog.SM
                     break;
                 default:
                     Console.ForegroundColor = ConsoleColor.White;
-                    Logger.Important($"There is not handler for '{logData.level.EnumToString<LogLevel>()}' color. Set White.");
+                    Logger.Important($"There is not handler for '{logData.level.EnumToString<LogLevel>()}' color. White color applied.");
                     break;
 
             }
@@ -116,7 +116,7 @@ namespace StruLog.SM
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Processing thread is dropped. {ex.GetType()}:{ex.Message}");
+                    Logger.Error($"Processing thread was dropped. {ex.GetType()}:{ex.Message}");
                 }
                 ProcessingQueue.CompleteAdding();
             }, TaskCreationOptions.LongRunning);

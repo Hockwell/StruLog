@@ -29,7 +29,7 @@ namespace StruLog.SM
             Config = config;
             ProcessingQueueSize = 1_000_000;
             ProcessingQueue = new BlockingCollection<LogData>(ProcessingQueueSize);
-            AccessAttemptsDelays_mSeconds = new int[] { 25, 45, 90, 250, 500, 750, 1000, 3000 };
+            AccessAttemptsDelays_mSeconds = new int[] { 25, 45, 90, 250, 500, 1000, 3000, 5000 };
             Logger = LoggersFactory.GetLogger<MongoDbSM>(true);
             MinLogLevel = config.minLogLevel;
         }
@@ -78,7 +78,7 @@ namespace StruLog.SM
             }
             catch (Exception ex)
             {
-                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely, processing thread doesn't work. {ex.GetType()}:{ex.Message}");
+                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely processing thread doesn't working. {ex.GetType()}:{ex.Message}");
 
             }
         }
@@ -93,7 +93,7 @@ namespace StruLog.SM
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Processing thread is dropped. {ex.GetType()}:{ex.Message}");
+                    Logger.Error($"Processing thread was dropped. {ex.GetType()}:{ex.Message}");
                 }
                 ProcessingQueue.CompleteAdding();
             }, TaskCreationOptions.LongRunning);
@@ -105,7 +105,7 @@ namespace StruLog.SM
             if (logEntryObj is LogDataModel model)
                 logsCollection.InsertOne(model);
             else
-                throw new StruLogException("Detected object with invalid type, when adding to mongo");
+                throw new StruLogException("Detected LogEntry with invalid type. Check your code.");
             return Task.CompletedTask;
 
         }

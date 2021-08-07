@@ -211,7 +211,7 @@ namespace StruLog.SM
             }
             catch (Exception ex)
             {
-                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely, processing thread doesn't work. {ex.GetType()}:{ex.Message}");
+                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely processing thread doesn't working. {ex.GetType()}:{ex.Message}");
             }
 
         }
