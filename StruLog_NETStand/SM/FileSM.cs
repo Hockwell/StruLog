@@ -175,9 +175,7 @@ namespace StruLog.SM
             //throw new Exception();
             if (!IsFirstFileInitialization())
             {
-                file.Flush();
-                file.Dispose();
-                file.Close();
+                CloseFile();
             }
 
             string logFilePath = ClarifyLogsPathFromConfig();
@@ -197,12 +195,17 @@ namespace StruLog.SM
                 }
                 catch
                 {
-                    Logger.Important("Writing to 'CreatedTimeOfLastLogFile (CToLLF)' is impossible. Next log file will create on next day and there is repeat writing attempt");
+                    Logger.Important("Writing to 'CreatedTimeOfLastLogFile (CToLLF)' is impossible. The next log file will be created the next day and writing attempt will be repeated");
                 }
 
             }
         }
-
+        private void CloseFile()
+        {
+            file.Flush();
+            file.Dispose();
+            file.Close();
+        }
         internal override void TryLog(LogData logData)
         {
             try

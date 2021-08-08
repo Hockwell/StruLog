@@ -73,7 +73,7 @@ Store (=storage) which using for StruLog events output.
 2. Not tested in ASP.NET.
 3. Log()-argument `args` don't work (it's useless, you can use `$"la {arg1} na-na {arg2}"`).
 4. `BeginScope(...)`, `IsEnabled(...)` are not implemented.
-5. Log() usage ways:
+5. Logging ways:
    - only text: `LogDebug(...)`, `Log(...)` etc
    - with custom object, without text: `Log<TState>(...)`, where `formatter`-argument is null
    - with text based on custom object, but without object publishing: `Log<TState>(...)`, where `formatter`-argument is not null.
