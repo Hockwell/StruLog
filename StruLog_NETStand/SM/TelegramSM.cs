@@ -91,7 +91,7 @@ namespace StruLog.SM
                 log = log.Replace('<', '[').Replace('>', ']');
                 await Client.SendTextMessageAsync(chatId, $"<code>{log}</code>{tag}", parseMode: Telegram.Bot.Types.Enums.ParseMode.Html);
             }
-            await Task.Delay(Config.sendingPeriod); //because TelegramBot work too slow
+            await Task.Delay(Config.sendingPeriod); //because TelegramBot works too slow
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace StruLog.SM
             }
             catch (Exception ex)
             {
-                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely, processing thread doesn't work. {ex.GetType()}:{ex.Message}");
+                Logger.Error($"Addition of logEntries to queue on processing is impossible. Likely processing thread doesn't working. {ex.GetType()}:{ex.Message}");
 
             }
         }
