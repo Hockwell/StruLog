@@ -56,7 +56,7 @@ namespace StruLog
             if (formatter != null) //object is absent
             {
                 message = formatter(state, exception);
-                obj = new { @event = eventObj };
+                obj = eventObj == null ? null : new { @event = eventObj };
             }
             else //print object only, without message
             {

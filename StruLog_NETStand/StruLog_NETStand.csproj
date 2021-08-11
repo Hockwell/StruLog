@@ -4,13 +4,13 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Hockwell</Authors>
-    <Version>1.5.1</Version>
+    <Version>1.5.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/Hockwell/StruLog</RepositoryUrl>
     <PackageTags>logger</PackageTags>
     <Description>Structural logging to Console, File, MongoDB, Telegram with multi-threading, output queues support and open source</Description>
-    <AssemblyVersion>1.5.1</AssemblyVersion>
-    <FileVersion>1.5.1</FileVersion>
+    <AssemblyVersion>1.5.2</AssemblyVersion>
+    <FileVersion>1.5.2</FileVersion>
     <PackageId>StruLog</PackageId>
     <Product>StruLog</Product>
     <RootNamespace>StruLog</RootNamespace>
