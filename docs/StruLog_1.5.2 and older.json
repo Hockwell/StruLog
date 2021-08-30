@@ -3,18 +3,18 @@
   "time": "LOCAL",
   "usingStores": [
     "console",
-    "file",
-    "mongoDB"
+    "telegram",
+    "file"
   ],
   "insideLoggingStore": "console",
   "stores": {
     "console": {
-      "outputPattern": "{time} | {loggerName-1} | {msg} {obj} {excMsg} {excStackTrace} {innerExc-1}",
+      "outputPattern": "{time} | {loggerName-1} | {msg} {obj} {excMsg}",
       "minLogLevel": "Trace"
     },
     "file": {
-      "path": "{project}/../../../Logs/{y}/{m}/{projectName}-{d}.log",
-      "outputPattern": "{time} | {logLevel} | {loggerName-2} | {msg} {obj} {excMsg} {excStackTrace} {excClassLine} {innerExc-5}",
+      "path": "{project}/Logs/{y}/{m}/{projectName}-{d}.log",
+      "outputPattern": "{time} | {logLevel} | {loggerName-2} | {msg} {obj} {excMsg} {excStackTrace}",
       "minLogLevel": "Trace",
       "recreationPeriodInDays": 1
     },
@@ -22,14 +22,12 @@
       "connectionString": "mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb",
       "collectionName": "Logs_{projectName}",
       "dbName": "Tests",
-      "outputPattern": "{time} {logLevel} {loggerName} {msg} {obj} {excMsg} {excStackTrace} {excClassLine} {innerExc-30}",
+      "outputPattern": "{time} {logLevel} {loggerName} {msg} {obj} {excMsg} {excStackTrace}",
       "minLogLevel": "Info"
     },
     "telegram": {
-      "token": "fgdsgsfdsdfsdfi6rOkOK4zm4aU",
-      "chats": [
-        456478422
-      ],
+      "token": "",
+      "chats": null,
       "minLogLevel": "Important",
       "outputPattern": "{time} {logLevel} {loggerName-1} {msg} {obj} {excMsg}",
       "sendingPeriod": 1000,
