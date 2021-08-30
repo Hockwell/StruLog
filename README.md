@@ -44,13 +44,16 @@ You can use {projectName} selector in mongo/collectionName and file/path.
 - `excMsg`
 - `excClassLine` – class and row where exception throwed (0 and 1 stack frames)
 - `excStackTrace`
+- `innerExc-i` – logger returns messages and stacktraces from i-th number included exceptions (inner exception objects); the value 'i' affects the logging speed, i:1,99
 - `time`
 - `logLevel`
 - `obj`
 - `loggerName` – monitored class full name (with namespace)
-- `loggerName-i` (doesn't work with mongo) allows cut over fullname(`MyCode.ChuckMustFly.FlyEngine`) and returns the i-th segment from the right (i=1 => `FlyEngine`, i=2 => `ChuckMustFly.FlyEngine`), i:1,9.
+- `loggerName-i` – (doesn't work with Mongo) allows cut over fullname(`MyCode.ChuckMustFly.FlyEngine`) and returns the i-th segment from the right (i=1 => `FlyEngine`, i=2 => `ChuckMustFly.FlyEngine`), i:1,9.
 
-Example for file: `{time} | {logLevel} | {loggerName-2} | {msg} {obj} {excMsg} {excStackTrace}`
+You can add any char to the output pattern.
+
+Example for file: `{time} | {logLevel} | {loggerName-2} | {msg} {obj} {excMsg} {excStackTrace} {innerExc-5}`
 
 #### file/path
 
@@ -78,7 +81,11 @@ Store (=storage) which using for StruLog events output.
    - with custom object, without text: `Log<TState>(...)`, where `formatter`-argument is null
    - with text based on custom object, but without object publishing: `Log<TState>(...)`, where `formatter`-argument is not null.
 
-# Basic details
+## Log entries post-processing
+
+- LogDataModel is a public type. Use it to fetch log entries from Mongo.
+
+# How it work
 
 - 1 logger for 1 class.
 - You can call out each Log() from >1 threads.

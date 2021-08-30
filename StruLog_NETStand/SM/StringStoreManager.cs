@@ -70,6 +70,8 @@ namespace StruLog.SM
         private static Func<LogData, string> CreateOutputActionBySelector(string selector)
         {
             var loggerNameRegex = new Regex(@"loggerName-[1-9]{1}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Match innerExceptionMatch = new Regex(@"innerExc-(\d{1,2})", RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(selector);
+            ushort suffix;
             switch (selector)
             {
                 case "msg":
@@ -79,17 +81,17 @@ namespace StruLog.SM
                     {
                         if (logData.exception is null)
                             return null;
-                        return GetExcMsg(logData);
+                        return GetExcMsg(logData.exception);
                     };
                 case "excClassLine":
-                    return (logData) => GetExcClassLine(logData);
+                    return (logData) => GetExcClassLine(logData.exception);
                 case "excStackTrace":
                     return (logData) =>
                     {
-                        if (logData.exception is null)
+                        if (logData.exception is null || string.IsNullOrWhiteSpace(logData.exception.StackTrace))
                             return null;
                         else
-                            return $"{Environment.NewLine}STACKTRACE:{logData.exception.StackTrace}";
+                            return $"{Environment.NewLine}||| Stacktrace: {logData.exception.StackTrace}";
                     };
                 case "time":
                     return (logData) => logData.time.ToString();
@@ -98,10 +100,31 @@ namespace StruLog.SM
                 case "loggerName":
                     return (logData) => logData.loggerName;
                 case var s when loggerNameRegex.IsMatch(s): //'loggerName-n'
-                    ushort n = ushort.Parse(s[s.Length - 1].ToString());
+                    ushort.TryParse(s[s.Length - 1].ToString(), out suffix);
                     return (logData) =>
                     {
-                        return ExtractShortLoggerName(n, logData.loggerName);
+                        return ExtractShortLoggerName(suffix, logData.loggerName);
+                    };
+                case var s when innerExceptionMatch.Success:
+                    ushort.TryParse(innerExceptionMatch.Groups[1].ToString(), out suffix);
+                    return (logData) =>
+                    {
+                        if (logData.exception is null)
+                            return null;
+                        Exception innerExc = logData.exception.InnerException;
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = 1; i <= suffix; i++)
+                        {
+                            if (innerExc is null)
+                                break;
+                            sb.Append($"{Environment.NewLine}INNER EXCEPTION: {GetExcMsg(innerExc)}");
+                            if (!string.IsNullOrWhiteSpace(innerExc.StackTrace))
+                            {
+                                sb.Append($"{ Environment.NewLine}||| Stacktrace: { innerExc.StackTrace}");
+                            }
+                            innerExc = innerExc.InnerException;
+                        }
+                        return sb.ToString();
                     };
                 case "obj":
                     return (logData) =>
@@ -110,7 +133,7 @@ namespace StruLog.SM
                         return obj != null ? JsonConvert.SerializeObject(obj) : string.Empty;
                     };
                 default:
-                    throw new StruLogConfigException($"Unknown selector '{selector}' detected. Repair or remove.");
+                    throw new StruLogConfigException($"Unknown selector '{selector}' detected. You must repair or remove it.");
             }
 
         }

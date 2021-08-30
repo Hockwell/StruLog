@@ -40,7 +40,7 @@ namespace StruLog
             try
             {
                 jsonDoc = JObject.Parse(configFileContent);
-                Config.stores = new StoresSettings();
+                Config.stores = new StoreSettings();
                 ParseProjectName();
                 ParseUsingStores();
                 ParseTime();

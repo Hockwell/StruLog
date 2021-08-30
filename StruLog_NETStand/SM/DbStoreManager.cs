@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using static StruLog.Entites.LogDataModel;
 
 namespace StruLog.SM
 {
@@ -69,6 +71,9 @@ namespace StruLog.SM
 
         private static Action<LogData, LogDataModel> CreateOutputActionBySelector(string selector)
         {
+            Match innerExceptionMatch = new Regex(@"innerExc-(\d{1,2})", RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(selector);
+            ushort suffix;
+
             switch (selector)
             {
                 case "msg":
@@ -77,13 +82,13 @@ namespace StruLog.SM
                     return (logData, logEntryObj) =>
                     {
                         if (logEntryObj.exception != null)
-                            logEntryObj.exception.msg = GetExcMsg(logData);
+                            logEntryObj.exception.msg = GetExcMsg(logData.exception);
                     };
                 case "excClassLine":
                     return (logData, logEntryObj) =>
                     {
                         if (logEntryObj.exception != null)
-                            logEntryObj.exception.classLine = GetExcClassLine(logData);
+                            logEntryObj.exception.classLine = GetExcClassLine(logData.exception);
                     };
                 case "excStackTrace":
                     return (logData, logEntryObj) =>
@@ -101,6 +106,23 @@ namespace StruLog.SM
                     {
                         logEntryObj.level = logData.level.EnumToString();
                     };
+                case var s when innerExceptionMatch.Success:
+                    ushort.TryParse(innerExceptionMatch.Groups[1].ToString(), out suffix);
+                    return (logData, logEntryObj) =>
+                    {
+                        if (logEntryObj.exception is null)
+                            return;
+                        Exception innerExc = logData.exception.InnerException;
+                        int listCapacitity = suffix / 2;
+                        logEntryObj.innerExceptions = new List<ExceptionInfo>(listCapacitity == 0 ? 1 : listCapacitity);
+                        for (int i = 1; i <= suffix; i++)
+                        {
+                            if (innerExc is null)
+                                break;
+                            logEntryObj.innerExceptions.Add(new ExceptionInfo { msg = GetExcMsg(innerExc), stackTrace = innerExc.StackTrace });
+                            innerExc = innerExc.InnerException;
+                        }
+                    };
                 case "loggerName":
                     return (logData, logEntryObj) =>
                     {
@@ -112,7 +134,7 @@ namespace StruLog.SM
                         logEntryObj.obj = logData.obj;
                     };
                 default:
-                    throw new StruLogConfigException($"Unknown selector '{selector}' detected. Repair it or remove.");
+                    throw new StruLogConfigException($"Unknown selector '{selector}' detected. You must repair or remove it.");
             }
         }
 

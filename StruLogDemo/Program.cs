@@ -15,11 +15,33 @@ namespace StruLogDemo
         {
             StruLog.StruLogProvider.Init(@"C:\Users\volnu\OneDrive\Data\Dev\Src\20\StruLog\StruLogDemo\StruLog.json", false);
             //StressTest();
-
+            TimeSpan time = TimeSpan.MaxValue;
             logger.Log<object>(LogLevel.Debug, default, new { el = 67, zel = 434, lalalachka = "ki" }, null, null);
             logger.Log<object>(LogLevel.Debug, new EventId(404), new { mulil = 5, poiwer = 6 }, new Exception(), null);
+            logger.Log<object>(LogLevel.Debug, new EventId(404), null, null, null);
             logger.LogCritical(new EventId(404), "dfsdf");
+            logger.LogTrace($"dfsdf {time}");
             logger.LogCritical(new EventId(), "dfsdf");
+            logger.LogCritical(new Exception("exc message sdafsdfsdf", new Exception("innnerException1", new Exception("innnerException2"))), "dfsdf");
+            logger.LogCritical(new Exception("eretertdfg exc", new Exception("innnerException6")), "dfsdsdfsdfewrf");
+
+            try
+            {
+                try
+                {
+                    lalka();
+                }
+                catch (Exception e)
+                {
+
+                    throw new Exception ("smth wrong",e);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(new Exception("eretertdfg exc", e), "dfsdsdfsdfewrf");
+            }
+            
             await Task.Delay(100000);
         }
         static async Task StressTest()

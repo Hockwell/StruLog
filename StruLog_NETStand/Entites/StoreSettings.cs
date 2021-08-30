@@ -2,7 +2,7 @@
 
 namespace StruLog.Entites
 {
-    internal class StoresSettings
+    internal class StoreSettings
     {
         internal ConsoleStore console;
         internal FileStore file;

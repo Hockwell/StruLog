@@ -30,15 +30,14 @@ namespace StruLog.SM
         /// <summary>
         /// Показывает класс и строку по 0 и 1 фреймам
         /// </summary>
-        /// <param name="logData"></param>
         /// <returns></returns>
-        protected static string GetExcClassLine(LogData logData)
+        protected static string GetExcClassLine(Exception exc)
         {
             string str = string.Empty;
-            if (logData.exception is null)
+            if (exc is null)
                 return null;
 
-            System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace(logData.exception, true);
+            System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace(exc, true);
             str += ExtractClassLineFromFrame(0);
             str += ExtractClassLineFromFrame(1);
             return str;
@@ -53,11 +52,11 @@ namespace StruLog.SM
                 return string.Empty;
             }
         }
-        protected static string GetExcMsg(LogData logData)
+        protected static string GetExcMsg(Exception exc)
         {
-            if (logData.exception is null)
+            if (exc is null)
                 return null;
-            return $"{ logData.exception.GetType()}: { logData.exception.Message }";
+            return $"{ exc.GetType()}: { exc.Message }";
         }
         internal static void RunProcessing()
         {

@@ -13,7 +13,7 @@ namespace StruLog.Entites
         /// by config params
         /// </summary>
         internal Func<DateTime> currentTime_Func;
-        internal StoresSettings stores;
+        internal StoreSettings stores;
         internal StoreManager insideLoggingStore;
         /// <summary>
         /// Special project name for logger operations

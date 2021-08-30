@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace StruLog.Entites
 {
     /// <summary>
     /// Отфильтрованная по паттерну логируемая информация, пригодная в том числе для типизированного добавления в БД
     /// </summary>
-    internal class LogDataModel
+    public class LogDataModel
     {
-        internal class ExceptionInfo
+        public class ExceptionInfo
         {
             public string classLine;
             public string msg;
@@ -21,5 +22,6 @@ namespace StruLog.Entites
         public string loggerName;
         public object obj;
         public ExceptionInfo exception;
+        public IList<ExceptionInfo> innerExceptions;
     }
 }
