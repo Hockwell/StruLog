@@ -77,9 +77,11 @@ Store (=storage) which using for StruLog events output.
 3. Log()-argument `args` don't work (it's useless, you can use `$"la {arg1} na-na {arg2}"`).
 4. `BeginScope(...)`, `IsEnabled(...)` are not implemented.
 5. Logging ways:
-   - only text: `LogDebug(...)`, `Log(...)` etc
-   - with custom object, without text: `Log<TState>(...)`, where `formatter`-argument is null
-   - with text based on custom object, but without object publishing: `Log<TState>(...)`, where `formatter`-argument is not null.
+   - you can write extension methods for ILogger - as in the type 'Logger', use information about ILogger-native methods and rewrites their when the logger lib changes.
+   - ILogger-native methods:
+     - only text: `LogDebug(...)`, `Log(...)` etc
+     - with custom object, without text: `Log<TState>(...)`, where `formatter`-argument is null
+     - with text based on custom object, but without object publishing: `Log<TState>(...)`, where `formatter`-argument is not null.
 
 ## Log entries post-processing
 
@@ -92,9 +94,9 @@ Store (=storage) which using for StruLog events output.
 
 ### Output queue for each logs storage
 
-- Work with each logs store based on demon-thread.
-- Each demon gets logEntry from himself queue and handles it.
-- Log() call adds logInfo to stores queues.
+- Work with each logs storage based on background thread.
+- Each such thread gets logEntry from himself queue and handles it.
+- Log() call adds logInfo to queue of each enabled storage.
 - Queues conception helps to amortize problems with access to storage (ex: Mongo connection fail) and non-constant logging intensity.
 - When occupied queue capacity will be too big, logger notifies about it.
 
