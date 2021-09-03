@@ -77,7 +77,7 @@ Store (=storage) which using for StruLog events output.
 3. Log()-argument `args` don't work (it's useless, you can use `$"la {arg1} na-na {arg2}"`).
 4. `BeginScope(...)`, `IsEnabled(...)` are not implemented.
 5. Logging ways:
-   - you can write extension methods for ILogger - as in the type 'Logger', use information about ILogger-native methods and rewrites their when the logger lib changes.
+   - you can write extension methods for ILogger and use them only for logging - your code will be encapsulated from the logger library, use the information about ILogger-native methods to create extensions
    - ILogger-native methods:
      - only text: `LogDebug(...)`, `Log(...)` etc
      - with custom object, without text: `Log<TState>(...)`, where `formatter`-argument is null
