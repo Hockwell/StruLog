@@ -88,18 +88,30 @@ namespace StruLog
                 }
                 catch (Exception ex)
                 {
-                    StoreLogger.Error($"Can't get initial access to store for processing beginning. | {ex.GetType()}:{ex.Message}");
+                    StoreLogger.Error($"Can't get initial access to store for beginning of processing. | {ex.GetType()}:{ex.Message}");
                     await Task.Delay(StoreManager.AccessAttemptsDelays_mSeconds[attemptNum < (StoreManager.AccessAttemptsDelays_mSeconds.Length - 1) ?
                         ++attemptNum : attemptNum]);
                 }
             }
 
             queueChecker = new ProcessingQueueChecker(StoreLogger, StoreManager.ProcessingQueue);//новый отчёт
+            TLogEntry logEntry;
+
             foreach (var logData in StoreManager.ProcessingQueue.GetConsumingEnumerable()) //Мониторит очередь
             {
                 if (!(StoreManager as StoreManager).IsLoggingAllowed(logData.level))
                     continue;
-                TLogEntry logEntry = (StoreManager as StoreManager).CreateLogEntry(logData, OutputPattern) as TLogEntry;
+                
+                try
+                {
+                    logEntry = (StoreManager as StoreManager).CreateLogEntry(logData, OutputPattern) as TLogEntry;
+                }
+                catch (Exception ex)
+                {
+                    StoreLogger.Warn($"Something wrong during the creation of log entry. The log entry will be skipped. | {ex.GetType()}:{ex.Message}");
+                    continue;
+                }
+                
 
                 attemptNum = -1;
 
@@ -113,7 +125,7 @@ namespace StruLog
                     }
                     catch (Exception ex)
                     {
-                        StoreLogger.Warn($"Access to store was broke off. Queue was not unloaded. | {ex.GetType()}:{ex.Message}");
+                        StoreLogger.Warn($"Access to store was interrupted. The queue was not unloaded. | {ex.GetType()}:{ex.Message}");
                         //останавливаемся на последнем эл-те delaysArray
                         await Task.Delay(StoreManager.AccessAttemptsDelays_mSeconds[attemptNum < StoreManager.AccessAttemptsDelays_mSeconds.Length - 1 ? ++attemptNum : attemptNum]);
                     }

@@ -69,7 +69,7 @@ namespace StruLog.SM
         }
         protected override Task WriteTo(object logEntry)
         {
-            Console.WriteLine($">>> {logEntry}");
+            Console.WriteLine($"{logEntry}");
             return Task.CompletedTask;
         }
         private void SwitchConsoleColorByLogLevel(LogData logData)

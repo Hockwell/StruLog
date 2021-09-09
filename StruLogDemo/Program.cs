@@ -2,6 +2,7 @@
 using StruLog;
 using System;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace StruLogDemo
@@ -15,11 +16,16 @@ namespace StruLogDemo
         {
             StruLog.StruLogProvider.Init(@"C:\Users\volnu\OneDrive\Data\Dev\Src\20\StruLog\StruLogDemo\StruLog.json", false);
             //StressTest();
+            object objt = null;
+            IPAddress adr = new IPAddress(32434);
             TimeSpan time = TimeSpan.MaxValue;
-            logger.Log<object>(LogLevel.Debug, default, new { el = 67, zel = 434, lalalachka = "ki" }, null, null);
-            logger.Log<object>(LogLevel.Debug, new EventId(404), new { mulil = 5, poiwer = 6 }, new Exception(), null);
-            logger.Log<object>(LogLevel.Debug, new EventId(404), null, null, null);
+            //logger.Log<object>(LogLevel.Debug, default, new { el = 67, zel = 434, lalalachka = "ki" }, null, null);
+            //logger.Log<object>(LogLevel.Debug, new EventId(404), new { mulil = 5, poiwer = 6 }, new Exception(), null);
+            //logger.Log<object>(LogLevel.Debug, new EventId(404), new { mulil = 5, poiwer = new { Xerox = "libka", Mindik= objt,  } }, new Exception(), null);
+            //logger.Log<object>(LogLevel.Debug, new EventId(404), null, null, null);
+            logger.Log<object>(LogLevel.Debug, new EventId(404), adr, null, null);
             logger.LogCritical(new EventId(404), "dfsdf");
+            logger.LogCritical(null);
             logger.LogTrace($"dfsdf {time}");
             logger.LogCritical(new EventId(), "dfsdf");
             logger.LogCritical(new Exception("exc message sdafsdfsdf", new Exception("innnerException1", new Exception("innnerException2"))), "dfsdf");
