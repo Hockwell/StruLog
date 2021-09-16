@@ -87,7 +87,7 @@ Store (=storage) which using for StruLog events output.
 
 - LogDataModel is a public type. Use it to fetch log entries from Mongo.
 
-# How it work
+# How it works
 
 - 1 logger for 1 class.
 - You can call out each Log() from >1 threads.
